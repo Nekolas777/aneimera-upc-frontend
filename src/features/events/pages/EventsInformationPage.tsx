@@ -1,5 +1,5 @@
 export const EventsInformationPage = () => {
   return (
-    <div>EventsInformationPage</div>
+    <div className="gray">EventsInformationPage</div>
   )
 }
