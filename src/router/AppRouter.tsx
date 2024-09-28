@@ -10,6 +10,10 @@ const router = createBrowserRouter([
     element: <LoginPage/>
   },
   {
+    path: "/login",
+    element: <Navigate to="/" />
+  },
+  {
     path: '/',
     element: <EventsRoutes/>,
     children: [

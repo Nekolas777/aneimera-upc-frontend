@@ -1,5 +1,9 @@
 export const NavigationBar = () => {
   return (
-    <div>NavigationBar</div>
+    <header className="bg-red-600">
+      <div className="section-container">
+        <h1>NavigationBar</h1>
+      </div>
+    </header>
   )
 }
