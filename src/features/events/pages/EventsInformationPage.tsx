@@ -2,8 +2,14 @@ import { CirclePlusIcon } from "../../../assets/icons/CirclePlusIcon";
 import { ActionItem } from "../components/ActionItem";
 import EventBanner from "../../../assets/images/main-banner.png";
 import { EventsTable } from "../components/ui/EventsTable";
+import { useNavigate } from "react-router-dom";
 
 export const EventsInformationPage = () => {
+
+  const navigate = useNavigate();
+
+  const navigateTo = (path: string) => navigate(path);
+
   return (
     <>
       <figure className='relative w-full aspect-[12/4]'>
@@ -33,6 +39,7 @@ export const EventsInformationPage = () => {
           <button
             className='flex flex-row gap-3 items-center bg-slate-900 px-5 py-3 rounded-xl 
             hover:bg-slate-950 hover:scale-[1.03] transition-all duration-300'
+            onClick={() => navigateTo("/event-register")}
           >
             <span className='tracking-wide text-white'>Crear evento</span>
             <CirclePlusIcon />
