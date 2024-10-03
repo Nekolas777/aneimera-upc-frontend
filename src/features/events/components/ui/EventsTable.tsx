@@ -5,7 +5,7 @@ import {
   getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useMemo, useState } from "react";
 import { Event, events } from "../../mocks/events-mock-data";
 import { ArrowIcon } from "../../../../assets/icons/ArrowIcon";
 import { TrashIcon } from "../../../../assets/icons/TrashIcon";
@@ -13,6 +13,8 @@ import { EditIcon } from "../../../../assets/icons/EditIcon";
 
 export const EventsTable = () => {
   const [data, setData] = useState(() => [...events].slice(0, 99));
+
+  const [typeFilter, setTypeFilter] = useState("");
 
   const columnHelper = createColumnHelper<Event>();
 
@@ -55,7 +57,7 @@ export const EventsTable = () => {
     columnHelper.display({
       id: "acciones",
       header: "Acciones",
-      cell: (info) => (
+      cell: () => (
         <div className='flex flex-row gap-1.5'>
           <button
             className='bg-blue-600 p-2 rounded-lg hover:bg-blue-800 transition-all duration-200 ease-linear'
@@ -74,8 +76,17 @@ export const EventsTable = () => {
     }),
   ];
 
+  // filtramos los datos basados en el filtro seleccionado.
+  // usamos el hook useMemo para memorizar los datos filtrados y evitar renderizados innecesarios.
+  // esta función solo se ejecuta cuando hay cambios en typeFilter o data
+  const filteredData = useMemo(() => {
+    return typeFilter
+      ? data.filter((row) => row.tipo.includes(typeFilter))
+      : data;
+  }, [typeFilter, data]);
+
   const table = useReactTable({
-    data,
+    data: filteredData,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -92,10 +103,6 @@ export const EventsTable = () => {
   );
 
   const handleNextPage = () => {
-    /* const { pageSize, pageIndex } = table.getState().pagination;
-    const totalItems = data.length;
-    const maxItemsOnCurrentPage = Math.min(pageSize, totalItems - (pageIndex + 1) * pageSize); */
-
     table.nextPage();
     setEventCount(
       (prevCount) => prevCount + table.getState().pagination.pageSize
@@ -103,10 +110,6 @@ export const EventsTable = () => {
   };
 
   const handlePreviousPage = () => {
-    /* const { pageSize, pageIndex } = table.getState().pagination;
-    const totalItems = data.length;
-    const maxItemsOnPreviousPage = Math.min(pageSize, totalItems - (pageIndex - 1) * pageSize); */
-
     table.previousPage();
     setEventCount(
       (prevCount) => prevCount - table.getState().pagination.pageSize
@@ -121,17 +124,36 @@ export const EventsTable = () => {
   };
 
   const handleEdit = () => {
-    // Lógica para editar el evento
     console.log("Editar");
   };
 
   const handleDelete = () => {
-    // Lógica para eliminar el evento
     console.log("Eliminar");
+  };
+
+  const handleFilterChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    setTypeFilter(e.target.value);
+    table.setPageIndex(0);
   };
 
   return (
     <div className='mt-10 min-w-full'>
+      <div className='mb-5'>
+        <label htmlFor='typeFilter' className='mr-2'>
+          Filter by Type:
+        </label>
+        <select
+          id='typeFilter'
+          value={typeFilter}
+          onChange={handleFilterChange}
+          className='border px-2 py-1'
+        >
+          <option value=''>Mostrar Todos</option>
+          <option value='Visita'>Visita</option>
+          <option value='Ponencia'>Ponencia</option>
+          <option value='Taller'>Taller</option>
+        </select>
+      </div>
       <div className='contain-inline-size min-w-full overflow-x-auto'>
         <table className='border-[1px] border-gray-300 w-full min-w-full text-left'>
           <thead className='bg-slate-800 text-white'>
@@ -154,41 +176,36 @@ export const EventsTable = () => {
             ))}
           </thead>
           <tbody>
-            {table.getRowModel().rows.length
-              ? table.getRowModel().rows.map((row, i) => (
-                  <tr
-                    key={row.id}
-                    className={`${
-                      i % 2 === 0 ? "bg-slate-200/80" : "bg-slate-50"
-                    } hover:text-red-800 cursor-pointer`}
+            {table.getRowModel().rows.map((row, i) => (
+              <tr
+                key={row.id}
+                className={`${
+                  i % 2 === 0 ? "bg-slate-200/80" : "bg-slate-50"
+                } hover:text-red-800 cursor-pointer`}
+              >
+                {row.getVisibleCells().map((cell) => (
+                  <td
+                    key={cell.id}
+                    className={`px-3.5 h-16 ${
+                      cell.column.id === "Event ID" ? "text-center" : ""
+                    } ${
+                      cell.column.id === "descripcion" ? "max-w-[250px]" : ""
+                    }`}
                   >
-                    {row.getVisibleCells().map((cell) => (
-                      <td
-                        key={cell.id}
-                        className={`px-3.5 h-16 ${
-                          cell.column.id === "Event ID" ? "text-center" : ""
-                        } ${
-                          cell.column.id === "descripcion"
-                            ? "max-w-[250px]"
-                            : ""
-                        }`}
-                      >
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </td>
-                    ))}
-                  </tr>
-                ))
-              : null}
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </td>
+                ))}
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
       {/* Navigation */}
       <footer className='w-full flex flex-row justify-between items-center mt-4'>
         <div className='flex flex-row items-center gap-3'>
-          <p className='whitespace-nowrap'>Eventos por página:</p>
+          <p className='whitespace-nowrap hidden sm:block'>
+            Eventos por página:
+          </p>
           <div className='container'>
             <select
               value={table.getState().pagination.pageSize}
@@ -218,7 +235,7 @@ export const EventsTable = () => {
             }}
           >
             <ArrowIcon direction='left' />
-            <span>Anterior</span>
+            <span className='hidden md:block'>Anterior</span>
           </button>
           <button
             className='p-1.5 border-[1px] border-gray-300 flex flex-row-reverse gap-1.5 items-center px-2.5 disabled:opacity-30'
@@ -228,7 +245,7 @@ export const EventsTable = () => {
             }}
           >
             <ArrowIcon direction='right' />
-            <span>Siguiente</span>
+            <span className='hidden md:block'>Siguiente</span>
           </button>
         </div>
       </footer>
