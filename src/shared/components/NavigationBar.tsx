@@ -12,7 +12,7 @@ export const NavigationBar = () => {
     /* sticky top-0 z-50 consider this for topbar flexible in <header> */
     <header className='bg-gray-200/80'>
       <div className='section-container h-full flex items-center justify-between'>
-        <figure className='w-32 sm:w-44 cursor-pointer'>
+        <figure className='w-32 xs:w-44 cursor-pointer'>
           <img className='size-full' src={LogoAneimera} />
         </figure>
         <div className='flex flex-row gap-3 items-center'>
