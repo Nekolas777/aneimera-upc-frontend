@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { Footer } from '../../../shared/components/Footer';
+import { NavigationBar } from '../../../shared/components/NavigationBar';
 
-export const RegisterEventPage = () => {
+export const RegisterTechnicalVisitPage = () => {
   const [showDropdown, setShowDropdown] = useState(false);
 
   return (
-    <div className="w-full font-poppins">
+    <div className="w-full">
       
       {/* Banner */}
       <div className="h-80 bg-gray-300 mb-4">
@@ -16,7 +18,7 @@ export const RegisterEventPage = () => {
         
         {/* Title and Description above form */}
         <div className="mb-6">
-          <h1 className="text-3xl font-bold text-red-500 m-2">Registro de evento</h1>
+          <h1 className="text-3xl font-bold text-red-500 m-2">Registro de  Visita tecnica</h1>
           <p className="text-gray-700 text-left">
             Utiliza el siguiente menú desplegable para escoger el tipo de evento que deseas crear: ponencia, taller o visita técnica.
           </p>
@@ -28,12 +30,12 @@ export const RegisterEventPage = () => {
             onClick={() => setShowDropdown(!showDropdown)}
             className="w-full bg-gray-200 px-10 py-2 rounded text-left"
           >
-            Formulario de Ponencia
+            Formulario de Registro de Visita Tecnica
           </button>
           {showDropdown && (
             <div className="absolute mt-2 w-full bg-white border rounded shadow-lg">
               <Link to="/workshop-register" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">Formulario de Registro para Taller</Link>
-              <Link to="/technical-visit-register" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">Formulario de Registro para Visita Técnica</Link>
+              <Link to="/event-register" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">Formulario de Registro para Evento</Link>
             </div>
           )}
         </div>
@@ -101,9 +103,8 @@ export const RegisterEventPage = () => {
         </form>  
       </div>
 
-
     </div>
   );
 };
 
-export default RegisterEventPage;
+export default RegisterTechnicalVisitPage;

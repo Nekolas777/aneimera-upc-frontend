@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-export const RegisterEventPage = () => {
+export const RegisterWorkshopPage = () => {
   const [showDropdown, setShowDropdown] = useState(false);
 
   return (
-    <div className="w-full font-poppins">
+    <div className="w-full">
       
       {/* Banner */}
       <div className="h-80 bg-gray-300 mb-4">
@@ -16,8 +16,8 @@ export const RegisterEventPage = () => {
         
         {/* Title and Description above form */}
         <div className="mb-6">
-          <h1 className="text-3xl font-bold text-red-500 m-2">Registro de evento</h1>
-          <p className="text-gray-700 text-left">
+          <h1 className="text-3xl font-bold text-red-500 m-2 font-poppins">Registro de Taller</h1>
+          <p className="text-gray-700 font-poppins">
             Utiliza el siguiente menú desplegable para escoger el tipo de evento que deseas crear: ponencia, taller o visita técnica.
           </p>
         </div>
@@ -28,32 +28,28 @@ export const RegisterEventPage = () => {
             onClick={() => setShowDropdown(!showDropdown)}
             className="w-full bg-gray-200 px-10 py-2 rounded text-left"
           >
-            Formulario de Ponencia
+            Formulario de Registro de Taller
           </button>
           {showDropdown && (
             <div className="absolute mt-2 w-full bg-white border rounded shadow-lg">
-              <Link to="/workshop-register" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">Formulario de Registro para Taller</Link>
+              <Link to="/event-register" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">Formulario de Registro para Evento</Link>
               <Link to="/technical-visit-register" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">Formulario de Registro para Visita Técnica</Link>
             </div>
           )}
         </div>
 
         {/* Form */}
-        <form className="bg-white p-6 rounded shadow-md space-y-6">
+        <form className="bg-white p-6 rounded shadow-md space-y-6 w-5/6">
           {/* Title and Description in the same row */}
-          <div className="flex flex-row md:space-x-6">
+          <div className="flex flex-col">
             <div className="flex-1">
               <label className="block text-gray-700">Título</label>
               <input type="text" className="w-full px-3 py-2 border rounded" />
             </div>
-            <div className="flex-1">
-              <label className="block text-gray-700">Misión y objetivo</label>
-              <input type="text" className="w-full px-3 py-2 border rounded" />
-            </div>
-          </div>
-          <div className="flex-1"> {/* Incrementar altura */}
+            <div className="flex-1"> {/* Incrementar altura */}
               <label className="block text-gray-700">Descripción</label>
               <textarea className="w-full px-3 py-2 border rounded"></textarea>
+          </div>
           </div>
 
           {/* Image and Other Fields in Columns */}
@@ -101,9 +97,8 @@ export const RegisterEventPage = () => {
         </form>  
       </div>
 
-
     </div>
   );
 };
 
-export default RegisterEventPage;
+export default RegisterWorkshopPage;
