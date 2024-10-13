@@ -10,20 +10,11 @@ import {
 
 import 'react-toastify/dist/ReactToastify.css';
 
-
 export const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
-
   const handleShowPassword = () => {
     setShowPassword(!showPassword);
   }
-
-
-
-
-
-
-
   return (
     <div className="flex flex-col md:flex-row h-screen">
       <div className="flex-1 flex flex-col justify-center items-center p-6 bg-white">
@@ -78,10 +69,4 @@ export const LoginPage = () => {
       </section>
     </div>
   );
-
-
-
-
-
-
 }
