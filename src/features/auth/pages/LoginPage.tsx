@@ -67,10 +67,4 @@ export const LoginPage = () => {
       </section>
     </div>
   );
-
-
-
-
-
-
 }
