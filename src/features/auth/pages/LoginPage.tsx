@@ -16,17 +16,17 @@ export const LoginPage = () => {
   return (
     <div className="flex flex-col md:flex-row h-screen">
       <div className="flex-1 flex flex-col justify-center items-center p-6 bg-white">
-        <div className="flex items-center mb-6">
+        <div className="flex items-center mb-1">
           <img className="w-12 h-12" src="src/assets/logo.png" alt="imagen" />
-          <h1 className="ml-2 text-xl">ANEIMERA</h1>
+          <h1 className="text-xl">ANEIMERA</h1>
         </div>
 
-        <section className="py-4 text-center">
+        <section className="py-10 text-center">
           <h1 className="text-2xl font-bold">Bienvenido a ANEIMERA</h1>
           <h5 className="text-lg font-semibold">Inicio de Sesión</h5>
         </section>
 
-        <form className="flex flex-col gap-4 w-full max-w-md">
+        <form className="flex flex-col gap-6 w-full max-w-md">
           <div className="relative">
             <RiMailLine className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-500" />
             <input
