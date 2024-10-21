@@ -8,10 +8,8 @@ import {
 } from "react-icons/ri";
 import 'react-toastify/dist/ReactToastify.css';
 
-
 export const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
-
   const handleShowPassword = () => {
     setShowPassword(!showPassword);
   }
@@ -69,4 +67,10 @@ export const LoginPage = () => {
       </section>
     </div>
   );
+
+
+
+
+
+
 }
