@@ -1,13 +1,11 @@
 import React, { useState } from "react";
 import { MdVisibility } from "react-icons/md";
-
 import {
   RiMailLine,
   RiLockLine,
   RiEyeLine,
   RiEyeOffLine
 } from "react-icons/ri";
-
 import 'react-toastify/dist/ReactToastify.css';
 
 
@@ -17,18 +15,11 @@ export const LoginPage = () => {
   const handleShowPassword = () => {
     setShowPassword(!showPassword);
   }
-
-
-
-
-
-
-
   return (
     <div className="flex flex-col md:flex-row h-screen">
       <div className="flex-1 flex flex-col justify-center items-center p-6 bg-white">
         <div className="flex items-center mb-6">
-          <img className="w-10 h-10" src="src/assets/logo.png" alt="imagen" />
+          <img className="w-12 h-12" src="src/assets/logo.png" alt="imagen" />
           <h1 className="ml-2 text-xl">ANEIMERA</h1>
         </div>
 
@@ -50,7 +41,7 @@ export const LoginPage = () => {
           <div className="relative">
             <RiLockLine className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-500" />
             <input
-              type={showPassword ? "text" : "password" }
+              type={showPassword ? "text" : "password"}
               className="w-full border border-gray-200 outline-none py-2 px-8 rounded-lg"
               placeholder="Contraseña"
             />
@@ -67,21 +58,15 @@ export const LoginPage = () => {
             )}
           </div>
 
-          <button className="mt-3 bg-[#e80404] text-white w-full py-2 rounded-lg hover:scale-105 transition-all">
+          <button className="mt-3 bg-[#e10600] text-white w-full py-2 rounded-lg hover:scale-105 transition-all">
             Iniciar Sesión
           </button>
         </form>
       </div>
 
-      <section className="hidden md:flex w-full md:w-1/2 bg-[#e80404]">
+      <section className="hidden md:flex w-full md:w-1/2 bg-[#e10600]">
         <img className="w-full h-auto max-h-1/2 object-contain" src="src/assets/logofondo.png" alt="imagen" />
       </section>
     </div>
   );
-
-
-
-
-
-
 }
