@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-export const RegisterEventPage = () => {
+export const RegisterTechnicalVisitPage = () => {
   const [showDropdown, setShowDropdown] = useState(false);
 
   return (
@@ -29,7 +29,7 @@ export const RegisterEventPage = () => {
               onClick={() => setShowDropdown(!showDropdown)}
               className="w-full bg-gray-200 px-10 py-2 rounded text-left flex justify-between items-center shadow-xl"
             >
-              Formulario de Ponencia
+              Formulario de Registro para Visita Técnica
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className={`h-5 w-5 transform transition-transform duration-200 ${showDropdown ? 'rotate-180' : 'rotate-0'}`}
@@ -46,7 +46,7 @@ export const RegisterEventPage = () => {
             {showDropdown && (
             <div className="absolute w-full bg-white border rounded shadow-lg">
               <Link to="/workshop-register" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">Formulario de Registro para Taller</Link>
-              <Link to="/technical-visit-register" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">Formulario de Registro para Visita Técnica</Link>
+              <Link to="/event-register" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">Formulario de Ponencia</Link>
             </div>
             )}
           </div>
@@ -71,14 +71,13 @@ export const RegisterEventPage = () => {
             </div>
   
             <div className="flex flex-col md:flex-row md:space-x-6">
-
               {/* Remaining Inputs */}
               <div className="flex-col gap-4 w-full">
     
                 <div className="flex md:flex-row flex-col md:space-x-6">
                   <div className="flex-1">
                     <label className="block text-gray-700 mt-6">Fecha</label>
-                    <input type="date" className="w-full bg-gray-100 px-3 py-3 shadow-md  rounded" />
+                    <input type="date" className="w-full bg-gray-100 px-3 py-3 shadow-md border-black rounded" />
                   </div>
                   <div className="flex-1">
                     <label className="block text-gray-700 mt-6">Hora</label>
@@ -114,8 +113,12 @@ export const RegisterEventPage = () => {
                 </div>
               </div>
             </div>
-  
-            <button type="submit" className="bg-red-500 w-full mt-6 text-white px-4 py-2 rounded">Crear Evento</button>
+            
+            <div className="flex flex-col  md:flex-row w-full">
+              <button type="submit" className="bg-gray-200 w-full mt-6 text-black px-4 py-2 mx-3 rounded">Descargar Data</button>
+              <button type="submit" className="bg-red-500 w-full mt-6 text-white px-4 py-2 mx-3 rounded">Crear Evento</button>
+            </div>
+            
             <h6 className="flex text-[12px] text-left">*Los campos son obligatorios</h6>
           </form>  
         </div>
@@ -126,4 +129,4 @@ export const RegisterEventPage = () => {
   );
 };
 
-export default RegisterEventPage;
+export default RegisterTechnicalVisitPage;

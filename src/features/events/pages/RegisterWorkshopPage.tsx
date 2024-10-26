@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-export const RegisterEventPage = () => {
+export const RegisterWorkshopPage = () => {
   const [showDropdown, setShowDropdown] = useState(false);
 
   return (
@@ -29,7 +29,7 @@ export const RegisterEventPage = () => {
               onClick={() => setShowDropdown(!showDropdown)}
               className="w-full bg-gray-200 px-10 py-2 rounded text-left flex justify-between items-center shadow-xl"
             >
-              Formulario de Ponencia
+              Formulario de Registro para Taller
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className={`h-5 w-5 transform transition-transform duration-200 ${showDropdown ? 'rotate-180' : 'rotate-0'}`}
@@ -45,7 +45,7 @@ export const RegisterEventPage = () => {
             </button>
             {showDropdown && (
             <div className="absolute w-full bg-white border rounded shadow-lg">
-              <Link to="/workshop-register" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">Formulario de Registro para Taller</Link>
+              <Link to="/event-register" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">Formulario de Ponencia</Link>
               <Link to="/technical-visit-register" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">Formulario de Registro para Visita Técnica</Link>
             </div>
             )}
@@ -53,7 +53,7 @@ export const RegisterEventPage = () => {
   
           {/* Form */}
           
-          <form className="bg-white p-6 rounded shadow-md space-y-6 border-black mb-10 shadow-lg">
+          <form className="bg-white p-6 rounded shadow-md space-y-6 border-black mb-10 shadow-lg border-gris">
             {/* Title and Description in the same row */}
             <div className="flex md:flex-row flex-col md:space-x-6 my-6"> {/* md flex */}
               <div className="flex-1">
@@ -114,6 +114,22 @@ export const RegisterEventPage = () => {
                 </div>
               </div>
             </div>
+
+            <label className="block text-red-500">Detalles del expositor:</label>
+            <div className="flex md:flex-row flex-col md:space-x-6 my-6"> {/* md flex */}
+              <div className="flex-1">
+                <label className="block text-gray-700">Nombre y apellido</label>
+                <input type="text" className="w-full px-3 py-3 bg-gray-100 shadow-md rounded" />
+              </div>
+              <div className="flex-1">
+                <label className="block text-gray-700">Rol u Ocupación</label>
+                <input type="text" className="w-full bg-gray-100 px-3 py-3 shadow-md  rounded" />
+              </div>
+              <div className="flex-1">
+                <label className="block text-gray-700">Imagen del expositor</label>
+                <input type="file" className="w-full bg-gray-100 px-3 py-3 shadow-md  rounded" />
+              </div>
+            </div>
   
             <button type="submit" className="bg-red-500 w-full mt-6 text-white px-4 py-2 rounded">Crear Evento</button>
             <h6 className="flex text-[12px] text-left">*Los campos son obligatorios</h6>
@@ -126,4 +142,4 @@ export const RegisterEventPage = () => {
   );
 };
 
-export default RegisterEventPage;
+export default RegisterWorkshopPage;
