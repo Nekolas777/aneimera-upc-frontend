@@ -71,7 +71,7 @@ const router = createBrowserRouter([
     element: <NotFoundPage />,
   },
 ]);
-
+    
 export const AppRouter = () => {
   return (
     <>

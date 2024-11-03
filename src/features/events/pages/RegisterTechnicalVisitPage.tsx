@@ -1,29 +1,28 @@
 import { ChangeEvent, FormEvent, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { Ponencia } from "../model/ponencia";
-import { PonenciaService } from "../service/ponencia.service";
+import { Visita } from "../model/visita";
+import { VisitaService } from "../service/visita.service";
 import EventBanner from "../../../assets/images/event-banner-aneimera.png";
 import EventImagePlaceholder from "../../../assets/images/image-event-placeholder.jpg";
 
 export const RegisterTechnicalVisitPage = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const ponenciaService = new PonenciaService();
+  const visitaService = new VisitaService();
 
   // manejamos los campos del formulario
-  const [formData, setFormData] = useState<Ponencia>({
-    titulo: "",
-    mision: "",
-    descripcion: "",
-    fecha: "",
-    hora: "",
-    aforo: 0,
-    modalidad: "Presencial",
-    enlace: "",
-    rutaImagen: "imagenes/ejemplo/mi_imagen.jpgww",
+  const [formData, setFormData] = useState<Visita>({
+    Titulo: "",
+    Descripcion: "",
+    Fecha: "",
+    Hora: "",
+    Aforo: 0,
+    Modalidad: "Presencial",
+    Enlace: "",
+    RutaImagen: "imagenes/ejemplo/mi_imagen.jpgww",
   });
 
-  // para manejar el archivo cargado de locla
+  // para manejar el archivo cargado de local
   const fileInput = useRef<HTMLInputElement>(null);
 
   const handleContainerClick = () => {
@@ -60,7 +59,7 @@ export const RegisterTechnicalVisitPage = () => {
     console.log(file);
   };
 
-  const handleSubmitPonencia = async (event: FormEvent) => {
+  const handleSubmitVisita = async (event: FormEvent) => {
     event.preventDefault();
 
     const file = fileInput.current?.files?.[0];
@@ -70,10 +69,10 @@ export const RegisterTechnicalVisitPage = () => {
     }
 
     try {
-      const response = await ponenciaService.createPonencia(formData, file);
-      console.log("Ponencia creada correctamente: ", response);
+      const response = await visitaService.createVisita(formData, file);
+      console.log("Visita creada correctamente: ", response);
     } catch (error) {
-      console.error("Error al crear ponencia", error);
+      console.error("Error al crear visita", error);
     }
   };
 
@@ -137,9 +136,9 @@ export const RegisterTechnicalVisitPage = () => {
             )}
           </div>
 
-          {/* Formulario para crear ponencias */}
+          {/* Formulario para crear visitas tèncnicas */}
           <form
-            onSubmit={handleSubmitPonencia}
+            onSubmit={handleSubmitVisita}
             className='bg-white p-6 rounded border-black'
           >
             {/* Title and Description in the same row */}
@@ -150,8 +149,8 @@ export const RegisterTechnicalVisitPage = () => {
                 <label className='block text-gray-700'>Título*</label>
                 <input
                   type='text'
-                  name='titulo'
-                  value={formData.titulo}
+                  name='Titulo'
+                  value={formData.Titulo}
                   onChange={handleInputChange}
                   className='w-full px-3 py-3 bg-gray-100 shadow-md rounded'
                 />
@@ -164,8 +163,8 @@ export const RegisterTechnicalVisitPage = () => {
                 Descripción*
               </label>
               <textarea
-                name='descripcion'
-                value={formData.descripcion}
+                name='Descripcion'
+                value={formData.Descripcion}
                 onChange={handleInputChange}
                 className='w-full h-full bg-gray-100 px-3 py-2 shadow-md rounded'
               ></textarea>
@@ -179,8 +178,8 @@ export const RegisterTechnicalVisitPage = () => {
                     <label className='block text-gray-700 mt-6'>Fecha</label>
                     <input
                       type='date'
-                      name='fecha'
-                      value={formData.fecha}
+                      name='Fecha'
+                      value={formData.Fecha}
                       onChange={handleInputChange}
                       className='w-full bg-gray-100 px-3 py-3 shadow-md  rounded'
                     />
@@ -189,8 +188,8 @@ export const RegisterTechnicalVisitPage = () => {
                     <label className='block text-gray-700 mt-6'>Hora</label>
                     <input
                       type='time'
-                      name='hora'
-                      value={formData.hora}
+                      name='Hora'
+                      value={formData.Hora}
                       onChange={handleInputChange}
                       className='w-full bg-gray-100 px-3 py-3 shadow-md  rounded'
                     />
@@ -202,8 +201,8 @@ export const RegisterTechnicalVisitPage = () => {
                     <label className='block text-gray-700 mt-6'>Aforo</label>
                     <input
                       type='number'
-                      name='aforo'
-                      value={formData.aforo}
+                      name='Aforo'
+                      value={formData.Aforo}
                       onChange={handleInputChange}
                       className='w-full bg-gray-100 px-3 py-3 shadow-md rounded'
                     />
@@ -213,8 +212,8 @@ export const RegisterTechnicalVisitPage = () => {
                       Modalidad
                     </label>
                     <select
-                      name='modalidad'
-                      value={formData.modalidad}
+                      name='Modalidad'
+                      value={formData.Modalidad}
                       onChange={handleInputChange}
                       className='w-full bg-gray-100 px-3 py-3 shadow-md  rounded'
                     >
@@ -230,8 +229,8 @@ export const RegisterTechnicalVisitPage = () => {
                   </label>
                   <input
                     type='url'
-                    name='enlace'
-                    value={formData.enlace}
+                    name='Enlace'
+                    value={formData.Enlace}
                     onChange={handleInputChange}
                     className='w-full bg-gray-100 px-3 py-3 shadow-md  rounded'
                   />
