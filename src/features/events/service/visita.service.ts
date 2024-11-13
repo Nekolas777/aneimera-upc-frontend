@@ -1,8 +1,6 @@
 import { Visita } from './../model/visita';
 import { HttpService } from "../../../shared/services/http.service";
 
-
-
 export class VisitaService extends HttpService{
     constructor() {
         super();
@@ -11,24 +9,17 @@ export class VisitaService extends HttpService{
     //mètodo para crear una visita 
     async createVisita(data: Visita, file: File) {
 
-        console.log(data);
-        console.log(file);
-
         const formData = new FormData();
-        formData.append("VisitaTecninaId", "0");
-        formData.append("Titulo", data.Titulo);
-        formData.append("Descripcion", data.Descripcion);
-        formData.append("Fecha", new Date(data.Fecha).toISOString());
-        formData.append("Hora", data.Hora);
-        formData.append("Aforo", data.Aforo.toString());
-        formData.append("Modalidad", data.Modalidad);
-        formData.append("Enlace", data.Enlace);
-        formData.append("RutaImagen", data.RutaImagen!);
+        formData.append("visitaTecninaId", "0");
+        formData.append("titulo", data.titulo);
+        formData.append("descripcion", data.descripcion);
+        formData.append("fecha", new Date(data.fecha).toISOString());
+        formData.append("hora", data.hora);
+        formData.append("aforo", data.aforo.toString());
+        formData.append("modalidad", data.modalidad);
+        formData.append("enlace", data.enlace);
+        formData.append("rutaImagen", data.rutaImagen!);
         formData.append("file", file);
-
-        formData.forEach((value, key) => {
-            console.log(`${key}: ${value}`);
-        });
 
         //enviar en formato "form-data", permite archivos binarios como imàgenes
         try {
@@ -71,7 +62,7 @@ export class VisitaService extends HttpService{
     // metodo para actualizar una visita tènica
     async updateVisita(data: Visita) {
         try {
-            const response = await this.http.put("VisitaTecnica/update", data);
+            const response = await this.http.put("/VisitaTecnica/update", data);
             return response?.data;
         } catch (error) {
             console.error(`Error update visita tènica with body: ${data}`, error);
