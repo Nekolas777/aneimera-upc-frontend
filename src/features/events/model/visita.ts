@@ -1,11 +1,11 @@
-export interface Visita{
-    VisitaTecninaId?: number;
-    Titulo: string;
-    Descripcion: string;
-    Fecha: string;
-    Hora: string;
-    Aforo: number;
-    Modalidad: string;
-    Enlace: string;
-    RutaImagen?: string;
+export interface Visita {
+  visitaTecninaId?: number;
+  titulo: string;
+  descripcion: string;
+  fecha: string;
+  hora: string;
+  aforo: number;
+  modalidad: string;
+  enlace: string;
+  rutaImagen?: string;
 }
