@@ -13,6 +13,7 @@
 body {
   min-height: 100dvh;
   font-family: "Poppins", sans-serif;
+  scroll-behavior: smooth;
 }
 
 .wrapper {
@@ -61,4 +62,22 @@ select:hover {
   overflow: hidden;
   font-size: 0.9rem;
   text-overflow: ellipsis;
+}
+
+/* styles for loader */
+
+.loader {
+  height: 0;
+  width: 0;
+  padding: 20px;
+  border: 6px solid #ccc;
+  border-right-color: #888;
+  border-radius: 50%;
+  animation: rotate 1s infinite linear;
+}
+
+@keyframes rotate {
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
 }
