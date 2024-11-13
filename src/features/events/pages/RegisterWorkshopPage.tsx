@@ -1,52 +1,67 @@
 import { ChangeEvent, FormEvent, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { PonenciaService } from "../service/ponencia.service";
-import { Ponencia } from "../model/ponencia";
-import EventBanner from "../../../assets/images/event-banner-aneimera.png";
+import { TallerService } from "../service/taller.service";
+import { Taller } from "../model/taller";
+import { useForm } from "../hooks/useForm";
+import { ErrorCreateEventDialog } from "../components/ErrorCreateEventDialog";
+import { SuccessfullCreateEventDialog } from "../components/SuccessfullCreateEventDialog";
+
+import EventBanner from "../../../assets/images/event-banner-aneimera.webp";
 import EventImagePlaceholder from "../../../assets/images/image-event-placeholder.jpg";
 import ExpositorImagePlaceholder from "../../../assets/images/user-placeholder.jpg";
 
 export const RegisterWorkshopPage = () => {
   const [showDropdown, setShowDropdown] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const [selectedExpositorImage, setSelectedExpositorImage] = useState<
-    string | null
-  >(null);
-  const ponenciaService = new PonenciaService();
+  const [selectedExpositorImage, setSelectedExpositorImage] = useState<string | null>(null);
+  const [hasError, setHasError] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+
+  // para manejar el archivo cargado de locla
+  const fileBannerImageInput = useRef<HTMLInputElement>(null);
+  const fileExpositorImageInput = useRef<HTMLInputElement>(null);
+
+  const tallerService = new TallerService();
 
   // manejamos los campos del formulario
-  const [formData, setFormData] = useState<Ponencia>({
+  const initialFormData: Taller = {
     titulo: "",
-    mision: "",
     descripcion: "",
     fecha: "",
     hora: "",
     aforo: 0,
     modalidad: "Presencial",
     enlace: "",
-    rutaImagen: "imagenes/ejemplo/mi_imagen.jpgww",
-  });
-
-  // para manejar el archivo cargado de locla
-  const fileInput = useRef<HTMLInputElement>(null);
-
-  const handleContainerClick = () => {
-    if (fileInput.current) {
-      fileInput.current.click();
-    }
+    rutaImagen: "imagenes/ejemplo/mi_imagen.jpg",
+    expositorNombre: "",
+    expositorRol: "",
+    expositorRutaImagen: "magenes/ejemplo/mi_imagen.jpg",
   };
 
-  // para manejar el data-binding
-  const handleInputChange = (
-    event: ChangeEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >
-  ) => {
-    const { name, value } = event.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
+  // campos requeridos
+  const requiredFields: (keyof Taller)[] = [
+    "titulo",
+    "descripcion",
+    "fecha",
+    "hora",
+    "aforo",
+    "modalidad",
+    "enlace",
+    "expositorNombre",
+    "expositorRol",
+  ];
+
+  // custom hook for manage fields validation and data-binding
+  const { formData, handleInputChange, allFieldsFilled } = useForm(
+    initialFormData,
+    requiredFields
+  );
+
+  const handleBannerContainerClick = () => {
+    if (fileBannerImageInput.current) {
+      fileBannerImageInput.current.click();
+    }
   };
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -60,8 +75,6 @@ export const RegisterWorkshopPage = () => {
     };
 
     reader.readAsDataURL(file);
-
-    console.log(file);
   };
 
   const handleExpositorImageChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -75,25 +88,58 @@ export const RegisterWorkshopPage = () => {
     }
   };
 
-  const handleSubmitPonencia = async (event: FormEvent) => {
+  const handleSubmitTaller = async (event: FormEvent) => {
     event.preventDefault();
+    setIsLoading(true);
 
-    const file = fileInput.current?.files?.[0];
-    if (!file) {
-      alert("No file selected");
+    const bannerFile = fileBannerImageInput.current?.files?.[0];
+    const expositorFile = fileExpositorImageInput.current?.files?.[0];
+
+    if (!bannerFile) {
+      alert("No Banner Image file selected");
+      setIsLoading(false);
+      return;
+    }
+
+    if (!expositorFile) {
+      alert("No Expositor Image file selected");
+      setIsLoading(false);
       return;
     }
 
     try {
-      const response = await ponenciaService.createPonencia(formData, file);
-      console.log("Ponencia creada correctamente: ", response);
+      const response = await tallerService.createTaller(
+        formData,
+        bannerFile,
+        expositorFile
+      );
+      console.log("Taller creada correctamente: ", response);
+      setIsSuccess(true);
     } catch (error) {
-      console.error("Error al crear ponencia", error);
+      console.error("Error al crear taller", error);
+      setHasError(true);
+    } finally {
+      setIsLoading(false);
     }
+  };
+
+  const handleErrorDialogClose = () => {
+    setHasError(false);
+  };
+
+  const handleSuccessDialogClose = () => {
+    setIsSuccess(false);
   };
 
   return (
     <div className='w-full font-poppins'>
+      {/* Loader for http requests */}
+      {isLoading && (
+        <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50'>
+          <div className='loader'></div>
+        </div>
+      )}
+
       {/* Banner */}
       <div className='w-full aspect-[9/7] xs:aspect-[9/6] md:aspect-[12/4]'>
         <img src={EventBanner} alt='Banner' className='size-full bg-cover' />
@@ -106,8 +152,8 @@ export const RegisterWorkshopPage = () => {
             Registro de eventos
           </h3>
           <p className='text-gray-700'>
-            Utiliza el siguiente menú desplegable para escoger el tipo de evento
-            que deseas crear: ponencia, taller o visita técnica.
+            Utiliza el siguiente menú desplegabfle para escoger el tipo de
+            evento que deseas crear: ponencia, taller o visita técnica.
           </p>
         </div>
 
@@ -154,7 +200,7 @@ export const RegisterWorkshopPage = () => {
 
           {/* Formulario para crear ponencias */}
           <form
-            onSubmit={handleSubmitPonencia}
+            onSubmit={handleSubmitTaller}
             className='bg-white p-6 rounded border-black'
           >
             {/* Title and Description in the same row */}
@@ -169,18 +215,6 @@ export const RegisterWorkshopPage = () => {
                   value={formData.titulo}
                   onChange={handleInputChange}
                   className='w-full px-3 py-3 bg-gray-100 shadow-md rounded'
-                />
-              </div>
-              <div className='flex-1'>
-                <label className='block text-gray-700'>
-                  Misión y objetivo*
-                </label>
-                <input
-                  type='text'
-                  name='mision'
-                  value={formData.mision}
-                  onChange={handleInputChange}
-                  className='w-full bg-gray-100 px-3 py-3 shadow-md  rounded'
                 />
               </div>
             </div>
@@ -273,7 +307,7 @@ export const RegisterWorkshopPage = () => {
                   </label>
                   <div
                     className='relative h-full cursor-pointer'
-                    onClick={handleContainerClick}
+                    onClick={handleBannerContainerClick}
                   >
                     <img
                       className='h-full w-full relative z-10'
@@ -281,12 +315,12 @@ export const RegisterWorkshopPage = () => {
                       alt='event-image-form'
                     />
                     <div
-                      className='absolute inset-0 z-20 bg-black opacity-0 
+                      className='absolute inset-0 z-20 bg-black opacity-0
               hover:opacity-20 transition-opacity duration-300'
                     ></div>
                     <input
                       type='file'
-                      ref={fileInput}
+                      ref={fileBannerImageInput}
                       className='hidden'
                       onChange={handleFileChange}
                     />
@@ -306,6 +340,9 @@ export const RegisterWorkshopPage = () => {
                 <label className='block text-gray-700'>Nombre y apellido</label>
                 <input
                   type='text'
+                  name='expositorNombre'
+                  value={formData.expositorNombre}
+                  onChange={handleInputChange}
                   className='w-full px-3 py-3 bg-gray-100 shadow-md rounded'
                 />
               </div>
@@ -313,6 +350,9 @@ export const RegisterWorkshopPage = () => {
                 <label className='block text-gray-700'>Rol u Ocupación</label>
                 <input
                   type='text'
+                  name='expositorRol'
+                  value={formData.expositorRol}
+                  onChange={handleInputChange}
                   className='w-full bg-gray-100 px-3 py-3 shadow-md  rounded'
                 />
               </div>
@@ -324,6 +364,7 @@ export const RegisterWorkshopPage = () => {
                     accept='image/*'
                     onChange={handleExpositorImageChange}
                     className='hidden'
+                    ref={fileExpositorImageInput}
                     id='file-input'
                   />
                   <label
@@ -344,14 +385,34 @@ export const RegisterWorkshopPage = () => {
 
             <button
               type='submit'
-              className='bg-red-500 w-full mt-8 text-white px-4 py-2.5 rounded text-xl font-medium 
-                hover:bg-red-600 transition-all duration-200 ease-linear'
+              className={`w-full mt-8 px-4 py-2.5 rounded text-xl font-medium transition-all duration-200 ease-linear ${
+                !allFieldsFilled
+                  ? "bg-gray-200 cursor-not-allowed text-slate-600"
+                  : "bg-red-500 hover:bg-red-600 text-white"
+              }`}
+              disabled={!allFieldsFilled}
             >
               Crear Evento
             </button>
             <h6 className='flex text-[12px] text-left mt-3'>
               * Los campos son obligatorios
             </h6>
+
+            {/* muestra el dialogo de error si el estado es true */}
+            {hasError && (
+              <ErrorCreateEventDialog
+                title='taller'
+                onClose={handleErrorDialogClose}
+              />
+            )}
+
+            {/* muestra el dialogo de creacion correcta si el estado es true */}
+            {isSuccess && (
+              <SuccessfullCreateEventDialog
+                title='taller'
+                onClose={handleSuccessDialogClose}
+              />
+            )}
           </form>
         </div>
       </div>

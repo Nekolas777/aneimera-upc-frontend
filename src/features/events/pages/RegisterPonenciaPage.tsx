@@ -2,16 +2,26 @@ import { ChangeEvent, FormEvent, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Ponencia } from "../model/ponencia";
 import { PonenciaService } from "../service/ponencia.service";
-import EventBanner from "../../../assets/images/event-banner-aneimera.png";
+import EventBanner from "../../../assets/images/event-banner-aneimera.webp";
 import EventImagePlaceholder from "../../../assets/images/image-event-placeholder.jpg";
+import { useForm } from "../hooks/useForm";
+import { ErrorCreateEventDialog } from "../components/ErrorCreateEventDialog";
+import { SuccessfullCreateEventDialog } from "../components/SuccessfullCreateEventDialog";
 
 export const RegisterPonenciaPage = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasError, setHasError] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+
+  // para manejar el archivo cargado de locla
+  const fileInput = useRef<HTMLInputElement>(null);
+
   const ponenciaService = new PonenciaService();
 
   // manejamos los campos del formulario
-  const [formData, setFormData] = useState<Ponencia>({
+  const initialFormData: Ponencia = {
     titulo: "",
     mision: "",
     descripcion: "",
@@ -20,29 +30,30 @@ export const RegisterPonenciaPage = () => {
     aforo: 0,
     modalidad: "Presencial",
     enlace: "",
-    rutaImagen: "imagenes/ejemplo/mi_imagen.jpgww",
-  });
+    rutaImagen: "imagenes/ejemplo/mi_imagen.jpg",
+  };
+  // campos requeridos
+  const requiredFields: (keyof Ponencia)[] = [
+    "titulo",
+    "mision",
+    "descripcion",
+    "fecha",
+    "hora",
+    "aforo",
+    "modalidad",
+    "enlace",
+  ];
 
-  // para manejar el archivo cargado de locla
-  const fileInput = useRef<HTMLInputElement>(null);
+  // custom hook for manage fields validation and data-binding
+  const { formData, handleInputChange, allFieldsFilled } = useForm(
+    initialFormData,
+    requiredFields
+  );
 
   const handleContainerClick = () => {
     if (fileInput.current) {
       fileInput.current.click();
     }
-  };
-
-  // para manejar el data-binding
-  const handleInputChange = (
-    event: ChangeEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >
-  ) => {
-    const { name, value } = event.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
   };
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -56,29 +67,48 @@ export const RegisterPonenciaPage = () => {
     };
 
     reader.readAsDataURL(file);
-
-    console.log(file);
   };
 
-  const handleSubmitPonencia = async(event: FormEvent) => {
+  const handleSubmitPonencia = async (event: FormEvent) => {
     event.preventDefault();
+    setIsLoading(true);
 
     const file = fileInput.current?.files?.[0];
     if (!file) {
-      alert('No file selected');
+      alert("No file selected");
+      setIsLoading(false);
       return;
     }
 
     try {
       const response = await ponenciaService.createPonencia(formData, file);
       console.log("Ponencia creada correctamente: ", response);
+      setIsSuccess(true);
     } catch (error) {
       console.error("Error al crear ponencia", error);
+      setHasError(true);
+    } finally {
+      setIsLoading(false);
     }
+  };
+
+  const handleErrorDialogClose = () => {
+    setHasError(false);
+  };
+
+  const handleSuccessDialogClose = () => {
+    setIsSuccess(false);
   };
 
   return (
     <div className='w-full font-poppins'>
+      {/* Loader for http requests */}
+      {isLoading && (
+        <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50'>
+          <div className='loader'></div>
+        </div>
+      )}
+
       {/* Banner */}
       <div className='w-full aspect-[9/7] xs:aspect-[9/6] md:aspect-[12/4]'>
         <img src={EventBanner} alt='Banner' className='size-full bg-cover' />
@@ -282,14 +312,34 @@ export const RegisterPonenciaPage = () => {
 
             <button
               type='submit'
-              className='bg-red-500 w-full mt-8 text-white px-4 py-2.5 rounded text-xl font-medium 
-                hover:bg-red-600 transition-all duration-200 ease-linear'
+              className={`w-full mt-8 px-4 py-2.5 rounded text-xl font-medium transition-all duration-200 ease-linear ${
+                !allFieldsFilled
+                  ? "bg-gray-200 cursor-not-allowed text-slate-600"
+                  : "bg-red-500 hover:bg-red-600 text-white"
+              }`}
+              disabled={!allFieldsFilled}
             >
               Crear Evento
             </button>
             <h6 className='flex text-[12px] text-left mt-3'>
               * Los campos son obligatorios
             </h6>
+
+            {/* muestra el dialogo de error si el estado es true */}
+            {hasError && (
+              <ErrorCreateEventDialog
+                title='ponencia'
+                onClose={handleErrorDialogClose}
+              />
+            )}
+
+            {/* muestra el dialogo de creacion correcta si el estado es true */}
+            {isSuccess && (
+              <SuccessfullCreateEventDialog
+                title='ponencia'
+                onClose={handleSuccessDialogClose}
+              />
+            )}
           </form>
         </div>
       </div>

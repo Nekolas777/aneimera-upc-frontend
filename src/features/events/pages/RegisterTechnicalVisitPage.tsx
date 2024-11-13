@@ -2,46 +2,57 @@ import { ChangeEvent, FormEvent, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Visita } from "../model/visita";
 import { VisitaService } from "../service/visita.service";
-import EventBanner from "../../../assets/images/event-banner-aneimera.png";
+import EventBanner from "../../../assets/images/event-banner-aneimera.webp";
 import EventImagePlaceholder from "../../../assets/images/image-event-placeholder.jpg";
+import { useForm } from "../hooks/useForm";
+import { ErrorCreateEventDialog } from "../components/ErrorCreateEventDialog";
+import { SuccessfullCreateEventDialog } from "../components/SuccessfullCreateEventDialog";
 
 export const RegisterTechnicalVisitPage = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const visitaService = new VisitaService();
-
-  // manejamos los campos del formulario
-  const [formData, setFormData] = useState<Visita>({
-    Titulo: "",
-    Descripcion: "",
-    Fecha: "",
-    Hora: "",
-    Aforo: 0,
-    Modalidad: "Presencial",
-    Enlace: "",
-    RutaImagen: "imagenes/ejemplo/mi_imagen.jpgww",
-  });
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasError, setHasError] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
   // para manejar el archivo cargado de local
   const fileInput = useRef<HTMLInputElement>(null);
+
+  const visitaService = new VisitaService();
+
+  // manejamos los campos del formulario
+  const initialFormData: Visita = {
+    titulo: "",
+    descripcion: "",
+    fecha: "",
+    hora: "",
+    aforo: 0,
+    modalidad: "Presencial",
+    enlace: "",
+    rutaImagen: "imagenes/ejemplo/mi_imagen.jpg",
+  };
+
+  // campos requeridos
+  const requiredFields: (keyof Visita)[] = [
+    "titulo",
+    "descripcion",
+    "fecha",
+    "hora",
+    "aforo",
+    "modalidad",
+    "enlace",
+  ];
+
+  // custom hook for manage fields validation and data-binding
+  const { formData, handleInputChange, allFieldsFilled } = useForm(
+    initialFormData,
+    requiredFields
+  );
 
   const handleContainerClick = () => {
     if (fileInput.current) {
       fileInput.current.click();
     }
-  };
-
-  // para manejar el data-binding
-  const handleInputChange = (
-    event: ChangeEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >
-  ) => {
-    const { name, value } = event.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
   };
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -61,23 +72,44 @@ export const RegisterTechnicalVisitPage = () => {
 
   const handleSubmitVisita = async (event: FormEvent) => {
     event.preventDefault();
+    setIsLoading(true);
 
     const file = fileInput.current?.files?.[0];
     if (!file) {
       alert("No file selected");
+      setIsLoading(false);
       return;
     }
 
     try {
       const response = await visitaService.createVisita(formData, file);
       console.log("Visita creada correctamente: ", response);
+      setIsSuccess(true);
     } catch (error) {
       console.error("Error al crear visita", error);
+      setHasError(true);
+    } finally {
+      setIsLoading(false);
     }
+  };
+
+  const handleErrorDialogClose = () => {
+    setHasError(false);
+  };
+
+  const handleSuccessDialogClose = () => {
+    setIsSuccess(false);
   };
 
   return (
     <div className='w-full font-poppins'>
+      {/* Loader for http requests */}
+      {isLoading && (
+        <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50'>
+          <div className='loader'></div>
+        </div>
+      )}
+
       {/* Banner */}
       <div className='w-full aspect-[9/7] xs:aspect-[9/6] md:aspect-[12/4]'>
         <img src={EventBanner} alt='Banner' className='size-full bg-cover' />
@@ -149,8 +181,8 @@ export const RegisterTechnicalVisitPage = () => {
                 <label className='block text-gray-700'>Título*</label>
                 <input
                   type='text'
-                  name='Titulo'
-                  value={formData.Titulo}
+                  name='titulo'
+                  value={formData.titulo}
                   onChange={handleInputChange}
                   className='w-full px-3 py-3 bg-gray-100 shadow-md rounded'
                 />
@@ -163,8 +195,8 @@ export const RegisterTechnicalVisitPage = () => {
                 Descripción*
               </label>
               <textarea
-                name='Descripcion'
-                value={formData.Descripcion}
+                name='descripcion'
+                value={formData.descripcion}
                 onChange={handleInputChange}
                 className='w-full h-full bg-gray-100 px-3 py-2 shadow-md rounded'
               ></textarea>
@@ -178,8 +210,8 @@ export const RegisterTechnicalVisitPage = () => {
                     <label className='block text-gray-700 mt-6'>Fecha</label>
                     <input
                       type='date'
-                      name='Fecha'
-                      value={formData.Fecha}
+                      name='fecha'
+                      value={formData.fecha}
                       onChange={handleInputChange}
                       className='w-full bg-gray-100 px-3 py-3 shadow-md  rounded'
                     />
@@ -188,8 +220,8 @@ export const RegisterTechnicalVisitPage = () => {
                     <label className='block text-gray-700 mt-6'>Hora</label>
                     <input
                       type='time'
-                      name='Hora'
-                      value={formData.Hora}
+                      name='hora'
+                      value={formData.hora}
                       onChange={handleInputChange}
                       className='w-full bg-gray-100 px-3 py-3 shadow-md  rounded'
                     />
@@ -201,8 +233,8 @@ export const RegisterTechnicalVisitPage = () => {
                     <label className='block text-gray-700 mt-6'>Aforo</label>
                     <input
                       type='number'
-                      name='Aforo'
-                      value={formData.Aforo}
+                      name='aforo'
+                      value={formData.aforo}
                       onChange={handleInputChange}
                       className='w-full bg-gray-100 px-3 py-3 shadow-md rounded'
                     />
@@ -212,8 +244,8 @@ export const RegisterTechnicalVisitPage = () => {
                       Modalidad
                     </label>
                     <select
-                      name='Modalidad'
-                      value={formData.Modalidad}
+                      name='modalidad'
+                      value={formData.modalidad}
                       onChange={handleInputChange}
                       className='w-full bg-gray-100 px-3 py-3 shadow-md  rounded'
                     >
@@ -229,8 +261,8 @@ export const RegisterTechnicalVisitPage = () => {
                   </label>
                   <input
                     type='url'
-                    name='Enlace'
-                    value={formData.Enlace}
+                    name='enlace'
+                    value={formData.enlace}
                     onChange={handleInputChange}
                     className='w-full bg-gray-100 px-3 py-3 shadow-md  rounded'
                   />
@@ -269,14 +301,34 @@ export const RegisterTechnicalVisitPage = () => {
 
             <button
               type='submit'
-              className='bg-red-500 w-full mt-8 text-white px-4 py-2.5 rounded text-xl font-medium 
-                hover:bg-red-600 transition-all duration-200 ease-linear'
+              className={`w-full mt-8 px-4 py-2.5 rounded text-xl font-medium transition-all duration-200 ease-linear ${
+                !allFieldsFilled
+                  ? "bg-gray-200 cursor-not-allowed text-slate-600"
+                  : "bg-red-500 hover:bg-red-600 text-white"
+              }`}
+              disabled={!allFieldsFilled}
             >
               Crear Evento
             </button>
             <h6 className='flex text-[12px] text-left mt-3'>
               * Los campos son obligatorios
             </h6>
+
+            {/* muestra el dialogo de error si el estado es true */}
+            {hasError && (
+              <ErrorCreateEventDialog
+                title='visita'
+                onClose={handleErrorDialogClose}
+              />
+            )}
+
+            {/* muestra el dialogo de creacion correcta si el estado es true */}
+            {isSuccess && (
+              <SuccessfullCreateEventDialog
+                title='visita'
+                onClose={handleSuccessDialogClose}
+              />
+            )}
           </form>
         </div>
       </div>
