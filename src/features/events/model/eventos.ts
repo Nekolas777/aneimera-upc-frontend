@@ -14,4 +14,5 @@ export interface Evento {
     visitaTecninaId?:number,
     tallerId?:number,
     ponenciaId?:number,
+    estado:number
 }

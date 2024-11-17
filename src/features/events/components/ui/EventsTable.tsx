@@ -5,10 +5,18 @@ import { EditIcon } from "../../../../assets/icons/EditIcon";
 import { GeneralService } from "../../service/general.service";
 import { RequestEvento } from "../../model/requestevento";
 import { Eventos } from "../../model/eventos";
+import { PonenciaService } from "../../service/ponencia.service";
+import { TallerService } from "../../service/taller.service";
+import { VisitaService } from "../../service/visita.service";
+import { EyeIcon } from "../../../../assets/icons/EyeIcon";
+import { EyeSlashIcon } from "../../../../assets/icons/EyeSlashIcon";
 
 export const EventsTable = () => {
 
   const generalservice = new GeneralService();
+  const ponenciaservice = new PonenciaService();
+  const tallerservice = new TallerService();
+  const visitaservice = new VisitaService();
 
   const [response, setResponse] = useState<Eventos | null>(null);
 
@@ -24,7 +32,6 @@ export const EventsTable = () => {
     try {
       const responsee = await generalservice.geteventos(formData);
       setResponse(responsee.eventos)
-      console.log("Lista de eventos: ", responsee.eventos.content);
     } catch (error) {
       console.error("Error", error);
     }
@@ -78,17 +85,57 @@ export const EventsTable = () => {
     }
   };
 
-  const handleDelete = (ponenciaId?:number,tallerId?:number,visitaTecninaId?:number) => {
-    //dependiendo si no es null va por cada camino
-    if(ponenciaId!=null){
+  const handleDelete = async (ponenciaId?: number, tallerId?: number, visitaTecninaId?: number) => {
+    // Dependiendo de si no es null, va por cada camino
+    const confirmDelete = window.confirm("¿Quieres eliminar este evento?");
+  
+    if (confirmDelete) {
+      try {
+        // Espera a que cada función asincrónica termine antes de proceder
+        if (ponenciaId != null) {
+          await ponenciaservice.deletePonencia(ponenciaId);
+        }
+        if (tallerId != null) {
+          await tallerservice.deleteTaller(tallerId);
+        }
+        if (visitaTecninaId != null) {
+          await visitaservice.deleteVisita(visitaTecninaId);
+        }
+  
+        // Después de la eliminación, recarga la página
+        window.location.reload();
+      } catch (error) {
+        console.error("Error al eliminar el evento", error);
+        // Puedes manejar el error aquí (mostrar un mensaje de error, etc.)
+      }
+    }
+  };
 
+  const handleVisibility = (index:number,ponenciaId?:number,tallerId?:number,visitaTecninaId?:number) => {
+    //dependiendo si no es null va por cada camino
+    
+    if(ponenciaId!=null){
+      ponenciaservice.cambiarEstadoPonencia(ponenciaId);
     }
     if(tallerId!=null){
-
+      tallerservice.cambiarEstadoTaller(tallerId);
     }
     if(visitaTecninaId!=null){
-
+      visitaservice.cambiarEstadoVisita(visitaTecninaId);
     }
+
+    setResponse((prevEventos) => {
+      if (!prevEventos) return prevEventos; // Si prevEventos es null o undefined, no hacemos nada
+    
+      return {
+        ...prevEventos,
+        content: prevEventos.content.map((evento, i) =>
+          i === index
+            ? { ...evento, estado: evento.estado === 1 ? 0 : 1 }
+            : evento
+        ),
+      };
+    });
   };
 
   const handleLink = (link:string) => {
@@ -170,25 +217,32 @@ export const EventsTable = () => {
             <th className="capitalize px-3.5 py-2.5">Tipo</th>
             <th className="capitalize px-3.5 py-2.5">Fecha</th>
             <th className="capitalize px-3.5 py-2.5">Hora</th>
+            <th className="capitalize px-3.5 py-2.5">Estado</th>
             <th className="capitalize px-3.5 py-2.5">Acciones</th>
           </tr>
           </thead>
           <tbody>
-            {response?.content.map((evento,i) => (
+            {response?.content.map((evento,index) => (
               <tr
-              key={i}
+              key={index}
               className={`${
-                i % 2 === 0 ? "bg-slate-200/80" : "bg-slate-50"
+                index % 2 === 0 ? "bg-slate-200/80" : "bg-slate-50"
               } hover:text-red-800 cursor-pointer text-center`}
-              onClick={()=>handleLink(evento.enlace)}
+              //onClick={()=>handleLink(evento.enlace)}
               >
-                <td>{i+1+((formData.page-1)*formData.size)}</td>
+                <td>{index+1+((formData.page-1)*formData.size)}</td>
                 <td>{evento.titulo}</td>
                 <td>{evento.aforo}</td>
                 <td>{evento.modalidad}</td>
                 <td>{evento.tipo}</td>
                 <td>{evento.fecha.toString().substring(0, 10)}</td>
                 <td>{evento.hora}</td>
+                <td><button
+                    className='bg-green-600 p-2 rounded-lg hover:bg-green-800 transition-all duration-200 ease-linear'
+                    onClick={() => handleVisibility(index,evento.ponenciaId,evento.tallerId,evento.visitaTecninaId)}
+                  >
+                    {evento.estado==1 ? <EyeIcon /> : <EyeSlashIcon />}
+                  </button></td>
                 <div className='flex flex-row gap-1.5 justify-center'>
                   <button
                     className='bg-blue-600 p-2 rounded-lg hover:bg-blue-800 transition-all duration-200 ease-linear'
