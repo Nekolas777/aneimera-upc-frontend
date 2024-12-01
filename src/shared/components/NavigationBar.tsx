@@ -14,7 +14,7 @@ export const NavigationBar = () => {
     // replace es para que no pueda retroceder en el hist de nav
     // ya que una vez cerrado la sesion no podra ingresar a la ruta anterior
     navigate("/login", {
-      replace: true
+      replace: true,
     });
   };
 
@@ -22,7 +22,10 @@ export const NavigationBar = () => {
     /* sticky top-0 z-50 consider this for topbar flexible in <header> */
     <header className='sticky top-0 z-50 bg-gray-200'>
       <div className='section-container h-full flex items-center justify-between'>
-        <figure className='w-32 xs:w-44 cursor-pointer'>
+        <figure
+          onClick={() => navigate("/events-information")}
+          className='w-32 sm:w-44 cursor-pointer'
+        >
           <img className='size-full' src={LogoAneimera} />
         </figure>
         <div className='flex flex-row gap-3 items-center'>

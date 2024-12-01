@@ -2,7 +2,7 @@ import { CirclePlusIcon } from "../../../assets/icons/CirclePlusIcon";
 import { ActionItem } from "../components/ActionItem";
 import { EventsTable } from "../components/ui/EventsTable";
 import { useNavigate } from "react-router-dom";
-import EventBanner from "../../../assets/images/event-banner-aneimera.png";
+import EventBanner from "../../../assets/images/event-banner-aneimera.webp";
 
 export const EventsInformationPage = () => {
   const navigate = useNavigate();
@@ -12,7 +12,7 @@ export const EventsInformationPage = () => {
   return (
     <>
       <figure className='relative w-full aspect-[9/7] xs:aspect-[9/6] md:aspect-[12/4]'>
-        <img src={EventBanner} className='size-full bg-cover' />
+        <img src={EventBanner} className='size-full bg-cover' alt="event_banner" />
         <div className='absolute inset-0 bg-black opacity-20'></div>
         <div
           className='absolute bottom-0 left-1/2 z-10 transform -translate-x-1/2 
