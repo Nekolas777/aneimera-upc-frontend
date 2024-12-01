@@ -52,7 +52,7 @@ export class PonenciaService extends HttpService {
   }
 
   // metodo para obtener una ponencia por su id
-  async getPonenciaById(id: string) {
+  async getPonenciaById(id: number) {
     try {
       const response = await this.http.get(`/Ponencia/get/${id}`);
       return response?.data;
@@ -74,12 +74,22 @@ export class PonenciaService extends HttpService {
   }
 
   // metodo pra eliminr una ponencia por Id
-  async deletePonencia(id: string) {
+  async deletePonencia(id: number) {
     try {
       const response = await this.http.delete(`/Ponencia/delete/${id}`);
       return response?.data;
     } catch (error) {
       console.error(`Error deleteing ponencia with id ${id}`, error);
+      throw error;
+    }
+  }
+
+  async cambiarEstadoPonencia(id: number) {
+    try {
+      const response = await this.http.put(`/Ponencia/cambiarEstado/${id}`);
+      return response?.data;
+    } catch (error) {
+      console.error(`Error update estado ponencia with id ${id}`, error);
       throw error;
     }
   }
