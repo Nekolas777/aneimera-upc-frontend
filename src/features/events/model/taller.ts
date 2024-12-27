@@ -1,4 +1,5 @@
 export interface Taller {
+  tallerId?: number,
   titulo: string,
   descripcion: string,
   fecha: string,
