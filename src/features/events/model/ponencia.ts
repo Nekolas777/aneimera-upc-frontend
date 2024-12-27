@@ -1,7 +1,7 @@
 export interface Ponencia {
   ponenciaId?: number;
   titulo: string;
-  mision: string;
+  misionObjetivo: string;
   descripcion: string;
   fecha: string;
   hora: string;

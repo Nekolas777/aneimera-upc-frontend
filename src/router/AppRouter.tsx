@@ -13,6 +13,9 @@ import { ProtectedRoutes } from "./ProtectedRoutes";
 import { NotFoundPage } from "../shared/components/NotFoundPage";
 import { PublicRoutes } from "./PublicRoutes";
 import { useAuth } from "../features/auth/hooks/useAuth";
+import { EditPonenciaPage } from "../features/events/pages/EditPonenciaPage";
+import { EditWorkshopPage } from "../features/events/pages/EditWorkshopPage";
+import { EditTechnicalVisitPage } from "../features/events/pages/EditTechnicalVisitPage";
 
 const PathRedirect = () => {
   const { isLogged } = useAuth();
@@ -64,6 +67,18 @@ const router = createBrowserRouter([
         path: "/technical-visit-register",
         element: <RegisterTechnicalVisitPage />,
       },
+      {
+        path: "/presentation/edit/:eventId",
+        element: <EditPonenciaPage />,
+      },
+      {
+        path: "/workshop/edit/:eventId",
+        element: <EditWorkshopPage />,
+      },
+      {
+        path: "/technical-visite/edit/:eventId",
+        element: <EditTechnicalVisitPage />,
+      },
     ],
   },
   {
@@ -71,7 +86,7 @@ const router = createBrowserRouter([
     element: <NotFoundPage />,
   },
 ]);
-
+    
 export const AppRouter = () => {
   return (
     <>
