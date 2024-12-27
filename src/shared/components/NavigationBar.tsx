@@ -50,7 +50,7 @@ export const NavigationBar = () => {
               Salir
             </span>
             <span className='tracking-wide text-white whitespace-nowrap hidden md:block'>
-              Cerrar Sesion
+              Cerrar sesión
             </span>
             <LogoutIcon />
           </button>
