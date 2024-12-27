@@ -2,13 +2,12 @@ import { useNavigate } from "react-router-dom";
 import { SuccessIcon } from "../../../assets/icons/SuccessIcon";
 import { formatText } from "../../../shared/helpers/format-text";
 
-interface SuccessfullCreateEventDialogProps {
+interface SuccessfullUpdateEventDialogProps {
   title: string;
   onClose: () => void;
 }
 
-export const SuccessfullCreateEventDialog = ({ title }: SuccessfullCreateEventDialogProps) => {
-
+export const SuccessfullUpdateEventDialog = ({ title }: SuccessfullUpdateEventDialogProps) => {
   const navigate = useNavigate();
 
   const navigateTo = (path: string) => navigate(path);
@@ -21,8 +20,8 @@ export const SuccessfullCreateEventDialog = ({ title }: SuccessfullCreateEventDi
         <div className="flex items-center justify-center">
           <SuccessIcon />
         </div>
-        <h2 className='text-2xl font-semibold text-center mt-6'>Evento creado</h2>
-        <p className="text-center text-slate-700 leading-loose mt-5">Se ha creado {article} {adjective} <strong>{title}</strong>.<br/>Ve a la seccion principal para mas detalles</p>
+        <h2 className='text-2xl font-semibold text-center mt-6'>Evento actualizado</h2>
+        <p className="text-center text-slate-700 leading-loose mt-5">Se ha actualizado {article} {adjective} <strong>{title}</strong>.<br/>Ve a la sección principal para más detalles</p>
         <button
           onClick={() => navigateTo('/events-information')}
           className='mt-6 bg-green-500 text-white font-medium px-4 py-2 rounded 
