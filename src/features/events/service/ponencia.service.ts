@@ -12,7 +12,7 @@ export class PonenciaService extends HttpService {
     const formData = new FormData();
     formData.append("PonenciaId", "0");
     formData.append("Titulo", data.titulo);
-    formData.append("MisionObjetivo", data.mision);
+    formData.append("MisionObjetivo", data.misionObjetivo);
     formData.append("Descripcion", data.descripcion);
     formData.append("Fecha", new Date(data.fecha).toISOString());
     formData.append("Hora", data.hora);
@@ -55,7 +55,7 @@ export class PonenciaService extends HttpService {
   async getPonenciaById(id: number) {
     try {
       const response = await this.http.get(`/Ponencia/get/${id}`);
-      return response?.data;
+      return response?.data.ponencia;
     } catch (error) {
       console.error(`Error fetching ponencia with ID ${id}`, error);
       throw error;
@@ -64,8 +64,9 @@ export class PonenciaService extends HttpService {
 
   // metodo para actualizar una ponencia
   async updatePonencia(data: Ponencia) {
+    console.log(data);
     try {
-      const response = await this.http.put("Ponencia/update", data);
+      const response = await this.http.put("/Ponencia/update", data);
       return response?.data;
     } catch (error) {
       console.error(`Error update ponencia with body: ${data}`, error);

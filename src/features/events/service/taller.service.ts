@@ -15,6 +15,27 @@ export class TallerService extends HttpService {
       throw error;
     }
   }
+  
+  async getTallerById(id: number) {
+    try {
+      const response = await this.http.get(`/Taller/get/${id}`);
+      return response?.data.taller;
+    } catch (error) {
+      console.error('Error fetching Taller', error);
+      throw error;
+    }
+  }
+
+  // metodo para actualizar un Taller
+  async updateTaller(data: Taller) {
+    try {
+      const response = await this.http.put("/Taller/update", data);
+      return response?.data;
+    } catch (error) {
+      console.error(`Error update ponencia with body: ${data}`, error);
+      throw error;
+    }
+  }
 
   async cambiarEstadoTaller(id: number) {
     try {
@@ -40,6 +61,7 @@ export class TallerService extends HttpService {
     formData.append("ExpositorRol", data.expositorRol);
     formData.append("ExpositorRutaImagen", data.expositorRutaImagen);
     formData.append("file", bannerFile);
+    formData.append("file_expositor", expositorFile);
 
     try {
       const response = await this.http.post('/Taller/create', formData, {
