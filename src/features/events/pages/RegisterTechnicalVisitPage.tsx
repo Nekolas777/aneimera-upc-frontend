@@ -7,9 +7,12 @@ import EventImagePlaceholder from "../../../assets/images/image-event-placeholde
 import { useForm } from "../hooks/useForm";
 import { ErrorCreateEventDialog } from "../components/ErrorCreateEventDialog";
 import { SuccessfullCreateEventDialog } from "../components/SuccessfullCreateEventDialog";
+import { TechnicalVisitPreviewDialog } from "../components/TechnicalVisitPreviewDialog";
+import { today } from "../../../shared/helpers/date-format";
 
 export const RegisterTechnicalVisitPage = () => {
   const [showDropdown, setShowDropdown] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
@@ -99,6 +102,10 @@ export const RegisterTechnicalVisitPage = () => {
 
   const handleSuccessDialogClose = () => {
     setIsSuccess(false);
+  };
+
+  const handlePreview = () => {
+    setShowPreview(true);
   };
 
   return (
@@ -214,6 +221,7 @@ export const RegisterTechnicalVisitPage = () => {
                       value={formData.fecha}
                       onChange={handleInputChange}
                       className='w-full bg-gray-100 px-3 py-3 shadow-md  rounded'
+                      min={today}
                     />
                   </div>
                   <div className='flex-1'>
@@ -299,17 +307,31 @@ export const RegisterTechnicalVisitPage = () => {
               </div>
             </div>
 
-            <button
-              type='submit'
-              className={`w-full mt-8 px-4 py-2.5 rounded text-xl font-medium transition-all duration-200 ease-linear ${
-                !allFieldsFilled
-                  ? "bg-gray-200 cursor-not-allowed text-slate-600"
-                  : "bg-red-500 hover:bg-red-600 text-white"
-              }`}
-              disabled={!allFieldsFilled}
-            >
-              Crear Evento
-            </button>
+            <div className='flex flex-row gap-5 flox-col sm:flex-row mt-8'>
+              <button
+                type='button'
+                onClick={handlePreview}
+                className={`w-full flex-1 px-4 py-2.5 rounded text-xl font-medium transition-all duration-200 ease-linear ${
+                  !allFieldsFilled || !selectedImage
+                    ? "bg-gray-200 cursor-not-allowed text-slate-600"
+                    : "bg-blue-500 hover:bg-blue-600 text-white"
+                }`}
+                disabled={!allFieldsFilled || !selectedImage}
+              >
+                Previsualizar evento
+              </button>
+              <button
+                type='submit'
+                className={`w-full flex-1 px-4 py-2.5 rounded text-xl font-medium transition-all duration-200 ease-linear ${
+                  !allFieldsFilled || !selectedImage
+                    ? "bg-gray-200 cursor-not-allowed text-slate-600"
+                    : "bg-red-500 hover:bg-red-600 text-white"
+                }`}
+                disabled={!allFieldsFilled || !selectedImage}
+              >
+                Crear Evento
+              </button>
+            </div>
             <h6 className='flex text-[12px] text-left mt-3'>
               * Los campos son obligatorios
             </h6>
@@ -327,6 +349,15 @@ export const RegisterTechnicalVisitPage = () => {
               <SuccessfullCreateEventDialog
                 title='visita'
                 onClose={handleSuccessDialogClose}
+              />
+            )}
+
+            {/* muestra el dialogo de previsualización si el estado es true */}
+            {showPreview && (
+              <TechnicalVisitPreviewDialog
+                visit={formData}
+                file={fileInput.current?.files?.[0] || null}
+                onClose={() => setShowPreview(false)}
               />
             )}
           </form>

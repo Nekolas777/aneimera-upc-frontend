@@ -2,14 +2,17 @@ import { ChangeEvent, FormEvent, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Ponencia } from "../model/ponencia";
 import { PonenciaService } from "../service/ponencia.service";
-import EventBanner from "../../../assets/images/event-banner-aneimera.webp";
-import EventImagePlaceholder from "../../../assets/images/image-event-placeholder.jpg";
 import { useForm } from "../hooks/useForm";
 import { ErrorCreateEventDialog } from "../components/ErrorCreateEventDialog";
 import { SuccessfullCreateEventDialog } from "../components/SuccessfullCreateEventDialog";
+import EventBanner from "../../../assets/images/event-banner-aneimera.webp";
+import EventImagePlaceholder from "../../../assets/images/image-event-placeholder.jpg";
+import { PonenciaPreviewDialog } from "../components/PonenciaPreviewDialog";
+import { today } from "../../../shared/helpers/date-format";
 
 export const RegisterPonenciaPage = () => {
   const [showDropdown, setShowDropdown] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
@@ -23,7 +26,7 @@ export const RegisterPonenciaPage = () => {
   // manejamos los campos del formulario
   const initialFormData: Ponencia = {
     titulo: "",
-    mision: "",
+    misionObjetivo: "",
     descripcion: "",
     fecha: "",
     hora: "",
@@ -32,10 +35,11 @@ export const RegisterPonenciaPage = () => {
     enlace: "",
     rutaImagen: "imagenes/ejemplo/mi_imagen.jpg",
   };
+
   // campos requeridos
   const requiredFields: (keyof Ponencia)[] = [
     "titulo",
-    "mision",
+    "misionObjetivo",
     "descripcion",
     "fecha",
     "hora",
@@ -98,6 +102,10 @@ export const RegisterPonenciaPage = () => {
 
   const handleSuccessDialogClose = () => {
     setIsSuccess(false);
+  };
+
+  const handlePreview = () => {
+    setShowPreview(true);
   };
 
   return (
@@ -192,8 +200,8 @@ export const RegisterPonenciaPage = () => {
                 </label>
                 <input
                   type='text'
-                  name='mision'
-                  value={formData.mision}
+                  name='misionObjetivo'
+                  value={formData.misionObjetivo}
                   onChange={handleInputChange}
                   className='w-full bg-gray-100 px-3 py-3 shadow-md  rounded'
                 />
@@ -225,6 +233,7 @@ export const RegisterPonenciaPage = () => {
                       value={formData.fecha}
                       onChange={handleInputChange}
                       className='w-full bg-gray-100 px-3 py-3 shadow-md  rounded'
+                      min={today}
                     />
                   </div>
                   <div className='flex-1'>
@@ -310,17 +319,31 @@ export const RegisterPonenciaPage = () => {
               </div>
             </div>
 
-            <button
-              type='submit'
-              className={`w-full mt-8 px-4 py-2.5 rounded text-xl font-medium transition-all duration-200 ease-linear ${
-                !allFieldsFilled
-                  ? "bg-gray-200 cursor-not-allowed text-slate-600"
-                  : "bg-red-500 hover:bg-red-600 text-white"
-              }`}
-              disabled={!allFieldsFilled}
-            >
-              Crear Evento
-            </button>
+            <div className='flex flex-row gap-5 flox-col sm:flex-row mt-8'>
+              <button
+                type='button'
+                onClick={handlePreview}
+                className={`w-full flex-1 px-4 py-2.5 rounded text-xl font-medium transition-all duration-200 ease-linear ${
+                  !allFieldsFilled || !selectedImage
+                    ? "bg-gray-200 cursor-not-allowed text-slate-600"
+                    : "bg-blue-500 hover:bg-blue-600 text-white"
+                }`}
+                disabled={!allFieldsFilled || !selectedImage}
+              >
+                Previsualizar evento
+              </button>
+              <button
+                type='submit'
+                className={`w-full flex-1 px-4 py-2.5 rounded text-xl font-medium transition-all duration-200 ease-linear ${
+                  !allFieldsFilled || !selectedImage
+                    ? "bg-gray-200 cursor-not-allowed text-slate-600"
+                    : "bg-red-500 hover:bg-red-600 text-white"
+                }`}
+                disabled={!allFieldsFilled || !selectedImage}
+              >
+                Crear Evento
+              </button>
+            </div>
             <h6 className='flex text-[12px] text-left mt-3'>
               * Los campos son obligatorios
             </h6>
@@ -338,6 +361,15 @@ export const RegisterPonenciaPage = () => {
               <SuccessfullCreateEventDialog
                 title='ponencia'
                 onClose={handleSuccessDialogClose}
+              />
+            )}
+
+            {/* muestra el dialogo de previsualización si el estado es true */}
+            {showPreview && (
+              <PonenciaPreviewDialog
+                ponencia={formData}
+                file={fileInput.current?.files?.[0] || null}
+                onClose={() => setShowPreview(false)}
               />
             )}
           </form>

@@ -9,12 +9,17 @@ import { SuccessfullCreateEventDialog } from "../components/SuccessfullCreateEve
 import EventBanner from "../../../assets/images/event-banner-aneimera.webp";
 import EventImagePlaceholder from "../../../assets/images/image-event-placeholder.jpg";
 import ExpositorImagePlaceholder from "../../../assets/images/user-placeholder.jpg";
+import { WorkshopPreviewDialog } from "../components/WorkshopPreviewDialog";
+import { today } from "../../../shared/helpers/date-format";
 
 export const RegisterWorkshopPage = () => {
   const [showDropdown, setShowDropdown] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const [selectedExpositorImage, setSelectedExpositorImage] = useState<string | null>(null);
+  const [selectedExpositorImage, setSelectedExpositorImage] = useState<
+    string | null
+  >(null);
   const [hasError, setHasError] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
@@ -131,6 +136,10 @@ export const RegisterWorkshopPage = () => {
     setIsSuccess(false);
   };
 
+  const handlePreview = () => {
+    setShowPreview(true);
+  };
+
   return (
     <div className='w-full font-poppins'>
       {/* Loader for http requests */}
@@ -244,6 +253,7 @@ export const RegisterWorkshopPage = () => {
                       value={formData.fecha}
                       onChange={handleInputChange}
                       className='w-full bg-gray-100 px-3 py-3 shadow-md  rounded'
+                      min={today}
                     />
                   </div>
                   <div className='flex-1'>
@@ -383,17 +393,36 @@ export const RegisterWorkshopPage = () => {
               </div>
             </div>
 
-            <button
-              type='submit'
-              className={`w-full mt-8 px-4 py-2.5 rounded text-xl font-medium transition-all duration-200 ease-linear ${
-                !allFieldsFilled
-                  ? "bg-gray-200 cursor-not-allowed text-slate-600"
-                  : "bg-red-500 hover:bg-red-600 text-white"
-              }`}
-              disabled={!allFieldsFilled}
-            >
-              Crear Evento
-            </button>
+            <div className='flex flex-row gap-5 flox-col sm:flex-row mt-8'>
+              <button
+                type='button'
+                onClick={handlePreview}
+                className={`w-full flex-1 px-4 py-2.5 rounded text-xl font-medium transition-all duration-200 ease-linear ${
+                  !allFieldsFilled || !selectedImage || !selectedExpositorImage
+                    ? "bg-gray-200 cursor-not-allowed text-slate-600"
+                    : "bg-blue-500 hover:bg-blue-600 text-white"
+                }`}
+                disabled={
+                  !allFieldsFilled || !selectedImage || !selectedExpositorImage
+                }
+              >
+                Previsualizar evento
+              </button>
+              <button
+                type='submit'
+                className={`w-full flex-1 px-4 py-2.5 rounded text-xl font-medium transition-all duration-200 ease-linear ${
+                  !allFieldsFilled || !selectedImage || !selectedExpositorImage
+                    ? "bg-gray-200 cursor-not-allowed text-slate-600"
+                    : "bg-red-500 hover:bg-red-600 text-white"
+                }`}
+                disabled={
+                  !allFieldsFilled || !selectedImage || !selectedExpositorImage
+                }
+              >
+                Crear Evento
+              </button>
+            </div>
+
             <h6 className='flex text-[12px] text-left mt-3'>
               * Los campos son obligatorios
             </h6>
@@ -411,6 +440,18 @@ export const RegisterWorkshopPage = () => {
               <SuccessfullCreateEventDialog
                 title='taller'
                 onClose={handleSuccessDialogClose}
+              />
+            )}
+
+            {/* muestra el dialogo de previsualización si el estado es true */}
+            {showPreview && (
+              <WorkshopPreviewDialog
+                workshop={formData}
+                fileBanner={fileBannerImageInput.current?.files?.[0] || null}
+                fileExpositor={
+                  fileExpositorImageInput.current?.files?.[0] || null
+                }
+                onClose={() => setShowPreview(false)}
               />
             )}
           </form>
