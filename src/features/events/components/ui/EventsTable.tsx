@@ -24,6 +24,7 @@ export const EventsTable = () => {
 
   const [response, setResponse] = useState<Eventos | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingEvents, setIsLoadingEvents] = useState(false);
 
   // states for managing when user will delete a event
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
@@ -40,10 +41,13 @@ export const EventsTable = () => {
 
   const fetchEventos = async () => {
     try {
+      setIsLoadingEvents(true);
       const response = await generalservice.geteventos(formData);
       setResponse(response.eventos);
     } catch (error) {
       console.error("Error", error);
+    } finally {
+      setIsLoadingEvents(false);
     }
   };
 
@@ -255,120 +259,139 @@ export const EventsTable = () => {
       <div className='mb-7 sm:mb-5 flex flex-wrap items-center gap-3.5'>
         <span className=''>Filtrar por:</span>
         <button
-          onClick={() => handleFilterChange('')}
+          onClick={() => handleFilterChange("")}
           className={`px-4 py-2 rounded ${
-            typeFilter === '' ? 'bg-red-500 text-white' : 'bg-gray-300 text-gray-700'
+            typeFilter === ""
+              ? "bg-red-500 text-white"
+              : "bg-gray-300 text-gray-700"
           }`}
         >
           Todos
         </button>
         <button
-          onClick={() => handleFilterChange('Visita')}
+          onClick={() => handleFilterChange("Visita")}
           className={`px-4 py-2 rounded ${
-            typeFilter === 'Visita' ? 'bg-red-500 text-white' : 'bg-gray-300 text-gray-700'
+            typeFilter === "Visita"
+              ? "bg-red-500 text-white"
+              : "bg-gray-300 text-gray-700"
           }`}
         >
           Visitas
         </button>
         <button
-          onClick={() => handleFilterChange('Ponencia')}
+          onClick={() => handleFilterChange("Ponencia")}
           className={`px-4 py-2 rounded ${
-            typeFilter === 'Ponencia' ? 'bg-red-500 text-white' : 'bg-gray-300 text-gray-700'
+            typeFilter === "Ponencia"
+              ? "bg-red-500 text-white"
+              : "bg-gray-300 text-gray-700"
           }`}
         >
           Ponencias
         </button>
         <button
-          onClick={() => handleFilterChange('Taller')}
+          onClick={() => handleFilterChange("Taller")}
           className={`px-4 py-2 rounded ${
-            typeFilter === 'Taller' ? 'bg-red-500 text-white' : 'bg-gray-300 text-gray-700'
+            typeFilter === "Taller"
+              ? "bg-red-500 text-white"
+              : "bg-gray-300 text-gray-700"
           }`}
         >
           Talleres
         </button>
       </div>
-      <div className='contain-inline-size min-w-full overflow-x-auto'>
-        <table className='events-table border-[1px] border-gray-300 w-full min-w-full text-left'>
-          <thead className='bg-slate-800 text-white'>
-            <tr className='text-center *:capitalize *:px-3.5 *:py-2.5'>
-              <th>N°</th>
-              <th>Título</th>
-              <th>Aforo</th>
-              <th>Modalidad</th>
-              <th>Tipo</th>
-              <th>Fecha</th>
-              <th>Hora</th>
-              <th>Estado</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {response?.content.map((evento, index) => (
-              <tr
-                key={index}
-                className={`${
-                  index % 2 === 0 ? "bg-slate-200/80" : "bg-slate-50"
-                } hover:text-red-800 text-center`}
-              >
-                <td>{index + 1 + (formData.page - 1) * formData.size}</td>
-                <td className='title-col' title={evento.titulo}>{evento.titulo}</td>
-                <td>{evento.aforo}</td>
-                <td>{evento.modalidad}</td>
-                <td>{evento.tipo}</td>
-                <td>{evento.fecha.toString().substring(0, 10)}</td>
-                <td>{evento.hora}</td>
-                <td>
-                  <button
-                    className={`p-1.5 rounded-lg transition-all duration-200 ease-linear ${
-                      evento.estado == true ? "bg-green-600" : "bg-gray-600"
-                    }`}
-                    onClick={() =>
-                      handleVisibility(
-                        index,
-                        evento.ponenciaId,
-                        evento.tallerId,
-                        evento.visitaTecninaId
-                      )
-                    }
-                  >
-                    {evento.estado == true ? (
-                      <RiEyeLine className='size-5 text-slate-50' />
-                    ) : (
-                      <RiEyeOffLine className='size-5 text-slate-50' />
-                    )}
-                  </button>
-                </td>
-                <td className='flex flex-row gap-2 justify-center'>
-                  <button
-                    className='bg-blue-600 p-2 rounded-lg hover:bg-blue-800 transition-all duration-200 ease-linear'
-                    onClick={() =>
-                      handleEdit(
-                        evento.ponenciaId,
-                        evento.tallerId,
-                        evento.visitaTecninaId
-                      )
-                    }
-                  >
-                    <EditIcon />
-                  </button>
-                  <button
-                    className='bg-red-600 p-2 rounded-lg hover:bg-red-800 transition-all duration-200 ease-linear'
-                    onClick={() =>
-                      handleDelete(
-                        evento.ponenciaId,
-                        evento.tallerId,
-                        evento.visitaTecninaId
-                      )
-                    }
-                  >
-                    <TrashIcon />
-                  </button>
-                </td>
+      {/* Table */}
+      {isLoadingEvents ? (
+        <div className='flex justify-center items-center py-4'>
+          <span className='text-base xl:text-xl font-medium text-slate-700/80'>
+            Cargando Eventos...
+          </span>
+        </div>
+      ) : (
+        <div className='contain-inline-size min-w-full overflow-x-auto'>
+          <table className='events-table border-[1px] border-gray-300 w-full min-w-full text-left'>
+            <thead className='bg-slate-800 text-white'>
+              <tr className='text-center *:capitalize *:px-3.5 *:py-2.5'>
+                <th>N°</th>
+                <th>Título</th>
+                <th>Aforo</th>
+                <th>Modalidad</th>
+                <th>Tipo</th>
+                <th>Fecha</th>
+                <th>Hora</th>
+                <th>Estado</th>
+                <th>Acciones</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              {response?.content.map((evento, index) => (
+                <tr
+                  key={index}
+                  className={`${
+                    index % 2 === 0 ? "bg-slate-200/80" : "bg-slate-50"
+                  } hover:text-red-800 text-center`}
+                >
+                  <td>{index + 1 + (formData.page - 1) * formData.size}</td>
+                  <td className='title-col' title={evento.titulo}>
+                    {evento.titulo}
+                  </td>
+                  <td>{evento.aforo}</td>
+                  <td>{evento.modalidad}</td>
+                  <td>{evento.tipo}</td>
+                  <td>{evento.fecha.toString().substring(0, 10)}</td>
+                  <td>{evento.hora}</td>
+                  <td>
+                    <button
+                      className={`p-1.5 rounded-lg transition-all duration-200 ease-linear ${
+                        evento.estado == true ? "bg-green-600" : "bg-gray-600"
+                      }`}
+                      onClick={() =>
+                        handleVisibility(
+                          index,
+                          evento.ponenciaId,
+                          evento.tallerId,
+                          evento.visitaTecninaId
+                        )
+                      }
+                    >
+                      {evento.estado == true ? (
+                        <RiEyeLine className='size-5 text-slate-50' />
+                      ) : (
+                        <RiEyeOffLine className='size-5 text-slate-50' />
+                      )}
+                    </button>
+                  </td>
+                  <td className='flex flex-row gap-2 justify-center'>
+                    <button
+                      className='bg-blue-600 p-2 rounded-lg hover:bg-blue-800 transition-all duration-200 ease-linear'
+                      onClick={() =>
+                        handleEdit(
+                          evento.ponenciaId,
+                          evento.tallerId,
+                          evento.visitaTecninaId
+                        )
+                      }
+                    >
+                      <EditIcon />
+                    </button>
+                    <button
+                      className='bg-red-600 p-2 rounded-lg hover:bg-red-800 transition-all duration-200 ease-linear'
+                      onClick={() =>
+                        handleDelete(
+                          evento.ponenciaId,
+                          evento.tallerId,
+                          evento.visitaTecninaId
+                        )
+                      }
+                    >
+                      <TrashIcon />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
       {/* Navigation */}
       <footer className='w-full flex flex-row justify-between items-center mt-4'>
         <div className='flex flex-row items-center gap-3'>
