@@ -31,6 +31,7 @@ export const EditPonenciaPage = () => {
     aforo: event.aforo,
     modalidad: event.modalidad,
     enlace: event.enlace,
+    estado: false,
     rutaImagen: event.rutaImagen,
   };
 

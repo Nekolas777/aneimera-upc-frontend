@@ -31,6 +31,7 @@ export const EditTechnicalVisitPage = () => {
     aforo: event?.aforo || 0,
     modalidad: event?.modalidad || "Presencial",
     enlace: event?.enlace || "",
+    estado: false,
     rutaImagen: event?.rutaImagen || "imagenes/ejemplo/mi_imagen.jpg",
   };
 
