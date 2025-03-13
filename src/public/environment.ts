@@ -1,4 +1,4 @@
 export const environment = {
-  production: false,
-  baseUrl: 'http://localhost:3000',
+  production: true,
+  baseUrl: import.meta.env.VITE_BASE_URL,
 }
