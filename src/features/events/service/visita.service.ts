@@ -34,13 +34,13 @@ export class VisitaService extends HttpService {
   async createVisita(data: Visita, file: File) {
     const formData = new FormData();
     formData.append("visitaTecninaId", "0");
-    formData.append("titulo", data.titulo);
-    formData.append("descripcion", data.descripcion);
+    formData.append("titulo", data.titulo.trim());
+    formData.append("descripcion", data.descripcion.trim());
     formData.append("fecha", new Date(data.fecha).toISOString());
     formData.append("hora", data.hora);
     formData.append("aforo", data.aforo.toString());
     formData.append("modalidad", data.modalidad);
-    formData.append("enlace", data.enlace);
+    formData.append("enlace", data.enlace.trim());
     formData.append("estado", 'false'); // Siempre se crea con estado false
     formData.append("rutaImagen", data.rutaImagen || "");
     formData.append("file", file);

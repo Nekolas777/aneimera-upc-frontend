@@ -11,14 +11,14 @@ export class PonenciaService extends HttpService {
 
     const formData = new FormData();
     formData.append("PonenciaId", "0");
-    formData.append("Titulo", data.titulo);
-    formData.append("MisionObjetivo", data.misionObjetivo);
-    formData.append("Descripcion", data.descripcion);
+    formData.append("Titulo", data.titulo.trim());
+    formData.append("MisionObjetivo", data.misionObjetivo.trim());
+    formData.append("Descripcion", data.descripcion.trim());
     formData.append("Fecha", new Date(data.fecha).toISOString());
     formData.append("Hora", data.hora);
     formData.append("Aforo", data.aforo.toString());
     formData.append("Modalidad", data.modalidad);
-    formData.append("Enlace", data.enlace);
+    formData.append("Enlace", data.enlace.trim());
     formData.append("estado", 'false'); // Siempre se crea con estado inicial false
     formData.append("RutaImagen", data.rutaImagen!);
     formData.append("file", file);

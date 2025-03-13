@@ -50,17 +50,17 @@ export class TallerService extends HttpService {
   async createTaller(data: Taller, bannerFile: File, expositorFile: File) {
     const formData = new FormData();
     formData.append("TallerId", "0");
-    formData.append("Titulo", data.titulo);
-    formData.append("Descripcion", data.descripcion);
+    formData.append("Titulo", data.titulo.trim());
+    formData.append("Descripcion", data.descripcion.trim());
     formData.append("Fecha", new Date(data.fecha).toISOString());
     formData.append("Hora", data.hora);
     formData.append("Aforo", data.aforo.toString());
     formData.append("Modalidad", data.modalidad);
-    formData.append("Enlace", data.enlace);
+    formData.append("Enlace", data.enlace.trim());
     formData.append("estado", 'false');
     formData.append("RutaImagen", data.rutaImagen || '');
-    formData.append("ExpositorNombre", data.expositorNombre);
-    formData.append("ExpositorRol", data.expositorRol);
+    formData.append("ExpositorNombre", data.expositorNombre.trim());
+    formData.append("ExpositorRol", data.expositorRol.trim());
     formData.append("ExpositorRutaImagen", data.expositorRutaImagen);
     formData.append("file", bannerFile);
     formData.append("fileExpositor", expositorFile);
