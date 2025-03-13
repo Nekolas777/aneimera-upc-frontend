@@ -32,6 +32,7 @@ export const RegisterTechnicalVisitPage = () => {
     aforo: 0,
     modalidad: "Presencial",
     enlace: "",
+    estado: false,
     rutaImagen: "imagenes/ejemplo/mi_imagen.jpg",
   };
 
