@@ -16,7 +16,7 @@ export interface Evento {
   visitaTecninaId?: number;
   tallerId?: number;
   ponenciaId?: number;
-  estado: number;
+  estado: boolean;
 }
 
 export enum EventType {

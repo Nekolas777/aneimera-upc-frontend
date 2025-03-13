@@ -1,6 +1,5 @@
 import { useState, useEffect, ChangeEvent } from 'react';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const useForm = <T extends Record<string, any>>(initialFormData: T, requiredFields: (keyof T)[]) => {
   const [formData, setFormData] = useState(initialFormData);
   const [allFieldsFilled, setAllFieldsFilled] = useState(false);
