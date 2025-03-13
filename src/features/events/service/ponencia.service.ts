@@ -19,6 +19,7 @@ export class PonenciaService extends HttpService {
     formData.append("Aforo", data.aforo.toString());
     formData.append("Modalidad", data.modalidad);
     formData.append("Enlace", data.enlace);
+    formData.append("estado", 'false'); // Siempre se crea con estado inicial false
     formData.append("RutaImagen", data.rutaImagen!);
     formData.append("file", file);
 
@@ -87,7 +88,7 @@ export class PonenciaService extends HttpService {
 
   async cambiarEstadoPonencia(id: number) {
     try {
-      const response = await this.http.put(`/Ponencia/cambiarEstado/${id}`);
+      const response = await this.http.patch(`/Ponencia/updateStatus/${id}`);
       return response?.data;
     } catch (error) {
       console.error(`Error update estado ponencia with id ${id}`, error);

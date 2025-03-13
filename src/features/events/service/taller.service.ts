@@ -39,7 +39,7 @@ export class TallerService extends HttpService {
 
   async cambiarEstadoTaller(id: number) {
     try {
-      const response = await this.http.put(`/Taller/cambiarEstado/${id}`);
+      const response = await this.http.patch(`/Taller/updateStatus/${id}`);
       return response?.data;
     } catch (error) {
       console.error(`Error updating estado taller with id ${id}`, error);
@@ -49,6 +49,7 @@ export class TallerService extends HttpService {
 
   async createTaller(data: Taller, bannerFile: File, expositorFile: File) {
     const formData = new FormData();
+    formData.append("TallerId", "0");
     formData.append("Titulo", data.titulo);
     formData.append("Descripcion", data.descripcion);
     formData.append("Fecha", new Date(data.fecha).toISOString());
@@ -56,12 +57,13 @@ export class TallerService extends HttpService {
     formData.append("Aforo", data.aforo.toString());
     formData.append("Modalidad", data.modalidad);
     formData.append("Enlace", data.enlace);
+    formData.append("estado", 'false');
     formData.append("RutaImagen", data.rutaImagen || '');
     formData.append("ExpositorNombre", data.expositorNombre);
     formData.append("ExpositorRol", data.expositorRol);
     formData.append("ExpositorRutaImagen", data.expositorRutaImagen);
     formData.append("file", bannerFile);
-    formData.append("file_expositor", expositorFile);
+    formData.append("fileExpositor", expositorFile);
 
     try {
       const response = await this.http.post('/Taller/create', formData, {

@@ -18,8 +18,8 @@ export class VisitaService extends HttpService {
 
   async cambiarEstadoVisita(id: number) {
     try {
-      const response = await this.http.put(
-        `/VisitaTecnica/cambiarEstado/${id}`
+      const response = await this.http.patch(
+        `/VisitaTecnica/updateStatus/${id}`
       );
       return response?.data;
     } catch (error) {
@@ -41,6 +41,7 @@ export class VisitaService extends HttpService {
     formData.append("aforo", data.aforo.toString());
     formData.append("modalidad", data.modalidad);
     formData.append("enlace", data.enlace);
+    formData.append("estado", 'false'); // Siempre se crea con estado false
     formData.append("rutaImagen", data.rutaImagen || "");
     formData.append("file", file);
 

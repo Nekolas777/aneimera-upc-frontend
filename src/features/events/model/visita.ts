@@ -7,5 +7,6 @@ export interface Visita {
   aforo: number;
   modalidad: string;
   enlace: string;
+  estado: boolean;
   rutaImagen?: string;
 }
