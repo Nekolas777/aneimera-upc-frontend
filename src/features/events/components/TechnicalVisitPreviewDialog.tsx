@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { CalendarIcon } from "../../../assets/icons/CalendarIcon";
 import { CloseIcon } from "../../../assets/icons/CloseIcon";
 import { Visita } from "../model/visita";
@@ -13,12 +14,20 @@ export const TechnicalVisitPreviewDialog = ({ visit, file, onClose }: TechnicalV
     if (file) {
       return URL.createObjectURL(file);
     }
-    return `https://aneimeraupc.somee.com${rutaImagen}`;
+    return `http://aneimeraupc.somee.com${rutaImagen}`;
   };
 
+  useEffect(() => {
+    document.body.classList.add('overflow-hidden');
+
+    return () => {
+      document.body.classList.remove('overflow-hidden');
+    };
+  }, [])
+
   return (
-    <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50'>
-      <div className='relative p-8 bg-white w-11/12 max-w-[800px]'>
+    <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 py-10'>
+      <div className='relative p-10 bg-white w-11/12 max-w-[750px] max-h-[800px] overflow-y-auto'>
         <button
           className='absolute top-0 right-0 bg-red-500 hover:bg-red-600 transition-all duration-200 ease-linear p-2'
           onClick={onClose}
@@ -36,7 +45,7 @@ export const TechnicalVisitPreviewDialog = ({ visit, file, onClose }: TechnicalV
           <div className='flex flex-col py-6 px-5'>
             <div className='flex flex-col gap-5'>
               <div className='flex flex-row justify-between items-center gap-5'>
-                <h2 className='font-medium workshop-title'>{visit.titulo}</h2>
+                <h2 className='font-medium workshop-title text-xl'>{visit.titulo}</h2>
                 <p className='text-sm'>
                   <span className='font-medium mr-1.5' style={{ fontSize: '17px' }}>Fecha:</span>
                   {visit.fecha}

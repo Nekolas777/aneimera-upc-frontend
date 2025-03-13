@@ -1,6 +1,7 @@
 import { CloseIcon } from "../../../assets/icons/CloseIcon";
 import { Ponencia } from "../model/ponencia";
 import MisionObjetivoPlaceholder from '../../../assets/images/ponencia11.webp';
+import { useEffect } from "react";
 
 interface PonenciaPreviewDialogProps {
   ponencia: Ponencia;
@@ -18,12 +19,22 @@ export const PonenciaPreviewDialog = ({
     if (file) {
       return URL.createObjectURL(file);
     }
-    return `https://aneimeraupc.somee.com${rutaImagen}`;
+    return `http://aneimeraupc.somee.com${rutaImagen}`;
   };
 
+  // this useEffect is used to disable the scroll of the body when the dialog is open
+  useEffect(() => {
+    document.body.classList.add('overflow-hidden');
+
+    return () => {
+      document.body.classList.remove('overflow-hidden');
+    };
+  }, [])
+  
+
   return (
-    <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 bo'>
-      <section className='relative p-5 bg-white w-11/12 max-w-[1400px]'>
+    <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 py-10'>
+      <section className='relative p-5 bg-white w-11/12 max-w-[1400px] max-h-[800px] h-full overflow-y-auto'>
         <button className="absolute top-0 right-0 bg-red-500 hover:bg-red-600 transition-all duration-200 ease-linear p-2" onClick={onClose}>
           <CloseIcon />
         </button>
