@@ -129,7 +129,7 @@ export const LoginPage = () => {
           </div>
           <button
             type='submit'
-            className='mt-3 text- bg-[#e10600] text-white w-full py-2 rounded-lg hover:scale-[1.02] transition-all duration-200'
+            className='select-none mt-3 font-medium bg-[#e10600] text-white w-full py-2 rounded-lg hover:scale-[1.02] transition-all duration-200'
           >
             Iniciar Sesión
           </button>
@@ -139,6 +139,10 @@ export const LoginPage = () => {
             )
           }
         </form>
+        <div className="flex flex-col mt-6 text-center gap-1">
+          <p className="text-slate-700"><span className="text-slate-800 font-medium mr-1 select-none">email:</span>neko@demo.com</p>
+          <p className="text-slate-700"><span className="text-slate-800 font-medium mr-1 select-none">contraseña:</span>secretPassword123</p>
+        </div>
       </div>
       <section className='hidden md:flex w-full md:w-1/2 bg-[#e10600]'>
         <img
