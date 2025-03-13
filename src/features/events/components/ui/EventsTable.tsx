@@ -189,7 +189,7 @@ export const EventsTable = () => {
           ...prevEventos,
           content: prevEventos.content.map((evento, i) =>
             i === index
-              ? { ...evento, estado: evento.estado === 1 ? 0 : 1 }
+              ? { ...evento, estado: evento.estado === false ? true : false }
               : evento
           ),
         };
@@ -252,7 +252,7 @@ export const EventsTable = () => {
           <div className='loader'></div>
         </div>
       )}
-      <div className='mb-5 flex flex-wrap items-center gap-3.5'>
+      <div className='mb-7 sm:mb-5 flex flex-wrap items-center gap-3.5'>
         <span className=''>Filtrar por:</span>
         <button
           onClick={() => handleFilterChange('')}
@@ -290,16 +290,16 @@ export const EventsTable = () => {
       <div className='contain-inline-size min-w-full overflow-x-auto'>
         <table className='events-table border-[1px] border-gray-300 w-full min-w-full text-left'>
           <thead className='bg-slate-800 text-white'>
-            <tr className='text-center'>
-              <th className='capitalize px-3.5 py-2.5'>N°</th>
-              <th className='capitalize px-3.5 py-2.5'>Título</th>
-              <th className='capitalize px-3.5 py-2.5'>Aforo</th>
-              <th className='capitalize px-3.5 py-2.5'>Modalidad</th>
-              <th className='capitalize px-3.5 py-2.5'>Tipo</th>
-              <th className='capitalize px-3.5 py-2.5'>Fecha</th>
-              <th className='capitalize px-3.5 py-2.5'>Hora</th>
-              <th className='capitalize px-3.5 py-2.5'>Estado</th>
-              <th className='capitalize px-3.5 py-2.5'>Acciones</th>
+            <tr className='text-center *:capitalize *:px-3.5 *:py-2.5'>
+              <th>N°</th>
+              <th>Título</th>
+              <th>Aforo</th>
+              <th>Modalidad</th>
+              <th>Tipo</th>
+              <th>Fecha</th>
+              <th>Hora</th>
+              <th>Estado</th>
+              <th>Acciones</th>
             </tr>
           </thead>
           <tbody>
@@ -308,10 +308,10 @@ export const EventsTable = () => {
                 key={index}
                 className={`${
                   index % 2 === 0 ? "bg-slate-200/80" : "bg-slate-50"
-                } hover:text-red-800 cursor-pointer text-center`}
+                } hover:text-red-800 text-center`}
               >
                 <td>{index + 1 + (formData.page - 1) * formData.size}</td>
-                <td className='title-col'>{evento.titulo}</td>
+                <td className='title-col' title={evento.titulo}>{evento.titulo}</td>
                 <td>{evento.aforo}</td>
                 <td>{evento.modalidad}</td>
                 <td>{evento.tipo}</td>
@@ -320,7 +320,7 @@ export const EventsTable = () => {
                 <td>
                   <button
                     className={`p-1.5 rounded-lg transition-all duration-200 ease-linear ${
-                      evento.estado == 1 ? "bg-green-600" : "bg-gray-600"
+                      evento.estado == true ? "bg-green-600" : "bg-gray-600"
                     }`}
                     onClick={() =>
                       handleVisibility(
@@ -331,7 +331,7 @@ export const EventsTable = () => {
                       )
                     }
                   >
-                    {evento.estado == 1 ? (
+                    {evento.estado == true ? (
                       <RiEyeLine className='size-5 text-slate-50' />
                     ) : (
                       <RiEyeOffLine className='size-5 text-slate-50' />
