@@ -76,7 +76,7 @@ export const LoginPage = () => {
       )}
       <div className='flex-1 flex flex-col justify-center items-center p-6 bg-white'>
         <div className='flex items-center mb-1'>
-          <img className='size-16' src='src/assets/logo.png' alt='imagen' />
+          <img className='size-16' src='/logo-aneimeraUPC.webp' alt='imagen' />
           <h1 className='text-2xl'>ANEIMERA</h1>
         </div>
 
