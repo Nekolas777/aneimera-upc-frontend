@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { CalendarIcon } from "../../../assets/icons/CalendarIcon";
 import { CloseIcon } from "../../../assets/icons/CloseIcon";
 import { Visita } from "../model/visita";
+import { environment } from "../../../public/environment";
 
 interface TechnicalVisitPreviewDialogProps {
   visit: Visita;
@@ -14,7 +15,8 @@ export const TechnicalVisitPreviewDialog = ({ visit, file, onClose }: TechnicalV
     if (file) {
       return URL.createObjectURL(file);
     }
-    return `http://aneimeraupc.somee.com${rutaImagen}`;
+
+    return `${environment.base}${rutaImagen}`
   };
 
   useEffect(() => {
@@ -40,6 +42,9 @@ export const TechnicalVisitPreviewDialog = ({ visit, file, onClose }: TechnicalV
               className='w-full h-[22rem] object-cover sm:object-fill'
               src={getImageSrc(visit.rutaImagen!, file)}
               alt={`Imagen de la visita técnica ${visit.titulo}`}
+              onError={(e) => {
+                e.currentTarget.src = "/aneimera-upc.jpg";
+              }}
             />
           </div>
           <div className='flex flex-col py-6 px-5'>

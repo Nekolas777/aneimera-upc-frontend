@@ -9,6 +9,8 @@ export class PonenciaService extends HttpService {
   // metodo para crear una ponencia agregamos el archivo(bannerImg para ponencia)
   async createPonencia(data: Ponencia, file: File) {
 
+    console.log(file);
+
     const formData = new FormData();
     formData.append("PonenciaId", "0");
     formData.append("Titulo", data.titulo.trim());

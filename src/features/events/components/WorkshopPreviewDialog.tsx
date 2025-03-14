@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { CloseIcon } from "../../../assets/icons/CloseIcon";
 import { ExternalIcon } from "../../../assets/icons/ExternalIcon";
 import { Taller } from "../model/taller";
+import { environment } from "../../../public/environment";
 
 interface WorkshopPreviewDialogProps {
   workshop: Taller;
@@ -20,7 +21,8 @@ export const WorkshopPreviewDialog = ({
     if (file) {
       return URL.createObjectURL(file);
     }
-    return `http://aneimeraupc.somee.com${rutaImagen}`;
+
+    return `${environment.base}${rutaImagen}`;
   };
 
   useEffect(() => {
@@ -46,6 +48,9 @@ export const WorkshopPreviewDialog = ({
               className='w-full h-[320px] object-fill'
               src={getImageSrc(workshop.rutaImagen, fileBanner)}
               alt={`Imagen del taller ${workshop.titulo}`}
+              onError={(e) => {
+                e.currentTarget.src = "/aneimera-upc.jpg";
+              }}
             />
           </figure>
           <div className='flex flex-col p-5 h-full'>
@@ -84,6 +89,9 @@ export const WorkshopPreviewDialog = ({
                       fileExpositor
                     )}
                     alt={`Imagen del expositor ${workshop.expositorNombre}`}
+                    onError={(e) => {
+                      e.currentTarget.src = "/logo-aneimeraUPC.webp";
+                    }}
                   />
                   <div className='flex flex-col justify-center gap-1'>
                     <h3 className='font-normal'>{workshop.expositorNombre}</h3>

@@ -2,6 +2,7 @@ import { CloseIcon } from "../../../assets/icons/CloseIcon";
 import { Ponencia } from "../model/ponencia";
 import MisionObjetivoPlaceholder from '../../../assets/images/ponencia11.webp';
 import { useEffect } from "react";
+import { environment } from "../../../public/environment";
 
 interface PonenciaPreviewDialogProps {
   ponencia: Ponencia;
@@ -19,7 +20,7 @@ export const PonenciaPreviewDialog = ({
     if (file) {
       return URL.createObjectURL(file);
     }
-    return `http://aneimeraupc.somee.com${rutaImagen}`;
+    return `${environment.base}${rutaImagen}`;
   };
 
   // this useEffect is used to disable the scroll of the body when the dialog is open
@@ -70,6 +71,9 @@ export const PonenciaPreviewDialog = ({
                   src={getImageSrc(ponencia.rutaImagen!, file)}
                   alt='ponencia-uno-image'
                   className='object-fill h-96 w-full'
+                  onError={(e) => {
+                    e.currentTarget.src = "/aneimera-upc.jpg";
+                  }}
                 />
               </div>
             </div>
