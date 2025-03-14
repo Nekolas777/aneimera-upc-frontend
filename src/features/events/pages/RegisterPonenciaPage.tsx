@@ -320,11 +320,11 @@ export const RegisterPonenciaPage = () => {
               </div>
             </div>
 
-            <div className='flex flex-row gap-5 flox-col sm:flex-row mt-8'>
+            <div className='flex flex-col sm:flex-row mt-8 gap-5'>
               <button
                 type='button'
                 onClick={handlePreview}
-                className={`w-full flex-1 px-4 py-2.5 rounded text-xl font-medium transition-all duration-200 ease-linear ${
+                className={`w-full flex-1 px-4 py-2.5 rounded text-lg sm:text-xl font-medium transition-all duration-200 ease-linear ${
                   !allFieldsFilled || !selectedImage
                     ? "bg-gray-200 cursor-not-allowed text-slate-600"
                     : "bg-blue-500 hover:bg-blue-600 text-white"
@@ -335,7 +335,7 @@ export const RegisterPonenciaPage = () => {
               </button>
               <button
                 type='submit'
-                className={`w-full flex-1 px-4 py-2.5 rounded text-xl font-medium transition-all duration-200 ease-linear ${
+                className={`w-full flex-1 px-4 py-2.5 rounded text-lg sm:text-xl font-medium transition-all duration-200 ease-linear ${
                   !allFieldsFilled || !selectedImage
                     ? "bg-gray-200 cursor-not-allowed text-slate-600"
                     : "bg-red-500 hover:bg-red-600 text-white"
