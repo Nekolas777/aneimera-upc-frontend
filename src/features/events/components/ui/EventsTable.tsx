@@ -14,6 +14,7 @@ import { Visita } from "../../model/visita";
 import { Taller } from "../../model/taller";
 import { Ponencia } from "../../model/ponencia";
 import { ConfirmDeleteEventDialog } from "../ConfirmDeleteEventDialog";
+import { isIdDisabled } from "../../../../shared/helpers/disableIds";
 
 export const EventsTable = () => {
   const generalservice = new GeneralService();
@@ -89,6 +90,15 @@ export const EventsTable = () => {
     tallerId?: number,
     visitaTecnicaId?: number
   ) => {
+    if (
+      isIdDisabled(ponenciaId) ||
+      isIdDisabled(tallerId) ||
+      isIdDisabled(visitaTecnicaId)
+    ) {
+      alert("Este evento no puede ser editado");
+      return;
+    }
+
     setIsLoading(true);
     let eventData: Ponencia | Taller | Visita | null = null;
     let eventId: number | undefined;
@@ -126,6 +136,15 @@ export const EventsTable = () => {
     tallerId?: number,
     visitaTecninaId?: number
   ) => {
+    if (
+      isIdDisabled(ponenciaId) ||
+      isIdDisabled(tallerId) ||
+      isIdDisabled(visitaTecninaId)
+    ) {
+      alert("Este evento no puede ser eliminado");
+      return;
+    }
+
     if (ponenciaId != null) {
       setDeleteEventId(ponenciaId);
       setDeleteEventType("ponencia");
@@ -175,6 +194,15 @@ export const EventsTable = () => {
     tallerId?: number,
     visitaTecninaId?: number
   ) => {
+    if (
+      isIdDisabled(ponenciaId) ||
+      isIdDisabled(tallerId) ||
+      isIdDisabled(visitaTecninaId)
+    ) {
+      alert("Este evento no puede modificar su estado");
+      return;
+    }
+
     setIsLoading(true);
     try {
       if (ponenciaId != null) {
@@ -311,15 +339,15 @@ export const EventsTable = () => {
           <table className='events-table border-[1px] border-gray-300 w-full min-w-full text-left'>
             <thead className='bg-slate-800 text-white'>
               <tr className='text-center *:capitalize *:py-2.5'>
-                <th className="px-5 sm:px-3.5">N°</th>
-                <th className="px-5 sm:px-3.5">Título</th>
-                <th className="px-5 sm:px-3.5">Aforo</th>
-                <th className="px-5 sm:px-3.5">Modalidad</th>
-                <th className="px-5 sm:px-3.5">Tipo</th>
-                <th className="px-5 sm:px-3.5">Fecha</th>
-                <th className="px-5 sm:px-3.5">Hora</th>
-                <th className="px-5 sm:px-3.5">Estado</th>
-                <th className="px-5 sm:px-3.5">Acciones</th>
+                <th className='px-5 sm:px-3.5'>N°</th>
+                <th className='px-5 sm:px-3.5'>Título</th>
+                <th className='px-5 sm:px-3.5'>Aforo</th>
+                <th className='px-5 sm:px-3.5'>Modalidad</th>
+                <th className='px-5 sm:px-3.5'>Tipo</th>
+                <th className='px-5 sm:px-3.5'>Fecha</th>
+                <th className='px-5 sm:px-3.5'>Hora</th>
+                <th className='px-5 sm:px-3.5'>Estado</th>
+                <th className='px-5 sm:px-3.5'>Acciones</th>
               </tr>
             </thead>
             <tbody>
@@ -328,7 +356,16 @@ export const EventsTable = () => {
                   key={index}
                   className={`${
                     index % 2 === 0 ? "bg-slate-200/80" : "bg-slate-50"
-                  } hover:text-red-800 text-center *:whitespace-nowrap`}
+                  } hover:text-red-800 text-center *:whitespace-nowrap ${
+                    evento.ponenciaId === 1 ||
+                    evento.ponenciaId === 2 ||
+                    evento.tallerId === 1 ||
+                    evento.tallerId === 2 ||
+                    evento.visitaTecninaId === 1 ||
+                    evento.visitaTecninaId === 2
+                      ? "text-blue-800"
+                      : ""
+                  }`}
                 >
                   <td>{index + 1 + (formData.page - 1) * formData.size}</td>
                   <td className='title-col' title={evento.titulo}>
