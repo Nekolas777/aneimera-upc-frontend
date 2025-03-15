@@ -1,3 +1,4 @@
+import { environment } from "../../../public/environment";
 import { HttpService } from "../../../shared/services/http.service";
 import { Taller } from "../model/taller";
 
@@ -15,13 +16,13 @@ export class TallerService extends HttpService {
       throw error;
     }
   }
-  
+
   async getTallerById(id: number) {
     try {
       const response = await this.http.get(`/Taller/get/${id}`);
       return response?.data.taller;
     } catch (error) {
-      console.error('Error fetching Taller', error);
+      console.error("Error fetching Taller", error);
       throw error;
     }
   }
@@ -57,23 +58,42 @@ export class TallerService extends HttpService {
     formData.append("Aforo", data.aforo.toString());
     formData.append("Modalidad", data.modalidad);
     formData.append("Enlace", data.enlace.trim());
-    formData.append("estado", 'false');
-    formData.append("RutaImagen", data.rutaImagen || '');
+    formData.append("estado", "false");
+    formData.append("RutaImagen", data.rutaImagen || "");
     formData.append("ExpositorNombre", data.expositorNombre.trim());
     formData.append("ExpositorRol", data.expositorRol.trim());
     formData.append("ExpositorRutaImagen", data.expositorRutaImagen);
-    formData.append("file", bannerFile);
-    formData.append("fileExpositor", expositorFile);
+
+    // si estamos en produccion, enviamos un archivo vacio (para evitar cosas raras xd)
+    if (environment.production) {
+      const invalidBannerFile = new File(
+        [bannerFile],
+        bannerFile.name.replace(/\.[^.]+$/, ".unknown"),
+        { type: "application/octet-stream" }
+      );
+
+      const invalidExpositorFile = new File(
+        [expositorFile],
+        expositorFile.name.replace(/\.[^.]+$/, ".unknown"),
+        { type: "application/octet-stream" }
+      );
+
+      formData.append("file", invalidBannerFile);
+      formData.append("fileExpositor", invalidExpositorFile);
+    } else {
+      formData.append("file", bannerFile);
+      formData.append("fileExpositor", expositorFile);
+    }
 
     try {
-      const response = await this.http.post('/Taller/create', formData, {
+      const response = await this.http.post("/Taller/create", formData, {
         headers: {
-          'Content-Type': 'multipart/form-data',
+          "Content-Type": "multipart/form-data",
         },
       });
       return response.data;
     } catch (error) {
-      console.error('Error creating taller:', error);
+      console.error("Error creating taller:", error);
       throw error;
     }
   }

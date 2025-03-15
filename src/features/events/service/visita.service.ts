@@ -1,5 +1,6 @@
 import { Visita } from "./../model/visita";
 import { HttpService } from "../../../shared/services/http.service";
+import { environment } from "../../../public/environment";
 
 export class VisitaService extends HttpService {
   constructor() {
@@ -41,9 +42,20 @@ export class VisitaService extends HttpService {
     formData.append("aforo", data.aforo.toString());
     formData.append("modalidad", data.modalidad);
     formData.append("enlace", data.enlace.trim());
-    formData.append("estado", 'false'); // Siempre se crea con estado false
+    formData.append("estado", "false"); // Siempre se crea con estado false
     formData.append("rutaImagen", data.rutaImagen || "");
-    formData.append("file", file);
+
+    // si estamos en produccion, enviamos un archivo vacio (para evitar cosas raras xd)
+    if (environment.production) {
+      const invalidFile = new File(
+        [file],
+        file.name.replace(/\.[^.]+$/, ".unknown"),
+        { type: "application/octet-stream" }
+      );
+      formData.append("file", invalidFile);
+    } else {
+      formData.append("file", file);
+    }
 
     try {
       const response = await this.http.post(`/VisitaTecnica/create`, formData, {

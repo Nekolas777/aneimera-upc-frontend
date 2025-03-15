@@ -1,5 +1,6 @@
 import { Ponencia } from "../model/ponencia";
 import { HttpService } from "../../../shared/services/http.service";
+import { environment } from "../../../public/environment";
 
 export class PonenciaService extends HttpService {
   constructor() {
@@ -8,7 +9,6 @@ export class PonenciaService extends HttpService {
 
   // metodo para crear una ponencia agregamos el archivo(bannerImg para ponencia)
   async createPonencia(data: Ponencia, file: File) {
-
     console.log(file);
 
     const formData = new FormData();
@@ -21,13 +21,20 @@ export class PonenciaService extends HttpService {
     formData.append("Aforo", data.aforo.toString());
     formData.append("Modalidad", data.modalidad);
     formData.append("Enlace", data.enlace.trim());
-    formData.append("estado", 'false'); // Siempre se crea con estado inicial false
+    formData.append("estado", "false"); // Siempre se crea con estado inicial false
     formData.append("RutaImagen", data.rutaImagen!);
-    formData.append("file", file);
 
-    formData.forEach((value, key) => {
-      console.log(`${key}: ${value}`);
-    });
+    // si estamos en produccion, enviamos un archivo vacio (para evitar cosas raras xd)
+    if (environment.production) {
+      const invalidFile = new File(
+        [file],
+        file.name.replace(/\.[^.]+$/, ".unknown"),
+        { type: "application/octet-stream" }
+      );
+      formData.append("file", invalidFile);
+    } else {
+      formData.append("file", file);
+    }
 
     // enviamos en formato "form-data", ya que permite archivos binarios como imgnes
     try {
