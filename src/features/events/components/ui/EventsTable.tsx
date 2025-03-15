@@ -310,16 +310,16 @@ export const EventsTable = () => {
         <div className='contain-inline-size min-w-full overflow-x-auto'>
           <table className='events-table border-[1px] border-gray-300 w-full min-w-full text-left'>
             <thead className='bg-slate-800 text-white'>
-              <tr className='text-center *:capitalize *:px-3.5 *:py-2.5'>
-                <th>N°</th>
-                <th>Título</th>
-                <th>Aforo</th>
-                <th>Modalidad</th>
-                <th>Tipo</th>
-                <th>Fecha</th>
-                <th>Hora</th>
-                <th>Estado</th>
-                <th>Acciones</th>
+              <tr className='text-center *:capitalize *:py-2.5'>
+                <th className="px-5 sm:px-3.5">N°</th>
+                <th className="px-5 sm:px-3.5">Título</th>
+                <th className="px-5 sm:px-3.5">Aforo</th>
+                <th className="px-5 sm:px-3.5">Modalidad</th>
+                <th className="px-5 sm:px-3.5">Tipo</th>
+                <th className="px-5 sm:px-3.5">Fecha</th>
+                <th className="px-5 sm:px-3.5">Hora</th>
+                <th className="px-5 sm:px-3.5">Estado</th>
+                <th className="px-5 sm:px-3.5">Acciones</th>
               </tr>
             </thead>
             <tbody>
@@ -328,7 +328,7 @@ export const EventsTable = () => {
                   key={index}
                   className={`${
                     index % 2 === 0 ? "bg-slate-200/80" : "bg-slate-50"
-                  } hover:text-red-800 text-center`}
+                  } hover:text-red-800 text-center *:whitespace-nowrap`}
                 >
                   <td>{index + 1 + (formData.page - 1) * formData.size}</td>
                   <td className='title-col' title={evento.titulo}>
