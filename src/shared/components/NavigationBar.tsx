@@ -32,7 +32,7 @@ export const NavigationBar = () => {
           <a
             className='flex flex-row gap-3 items-center border-r-2 
             border-slate-900/80 pr-3 sm:pr-5 mr-1 sm:mr-3 py-1.5 cursor-pointer group'
-            href='https://aneimera-upc.vercel.app/'
+            href='https://aneimera-upc-demo.vercel.app/'
             target='_blank'
             rel='noopener noreferrer'
           >
