@@ -7,7 +7,7 @@
 ---
 
 <p align="center">
-    Plataforma administrativa para la gestión de eventos de ANEIMERA UPC, permitiendo la creación, actualización y eliminación de eventos, así como el control de su visibilidad en la <a href="https://aneimera-upc-demo.vercel.app/AneimeraPeruPage">página oficial</a> 
+    Plataforma administrativa para la gestión de eventos de ANEIMERA UPC, permitiendo la creación, actualización y eliminación de eventos, así como el control de su visibilidad en la <a href="https://aneimera-upc-demo.vercel.app/">página oficial</a> 
     <br>
     <br> 
 </p>
