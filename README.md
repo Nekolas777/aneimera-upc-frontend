@@ -25,11 +25,11 @@
   - [3️⃣ Configurar variables de entorno](#3️⃣-configurar-variables-de-entorno)
   - [4️⃣ Iniciar el servidor de desarrollo](#4️⃣-iniciar-el-servidor-de-desarrollo)
 - [🎨 Screenshots \& Previews ](#-screenshots--previews-)
-  - [🏠 Hero de la Aplicación](#-hero-de-la-aplicación)
   - [🔑 Página de Inicio de Sesión](#-página-de-inicio-de-sesión)
+  - [🚀 Hero de Pagina Principal](#-hero-de-pagina-principal)
   - [📋 Tabla de Eventos](#-tabla-de-eventos)
-  - [📅 Creacion de Evento](#-creacion-de-evento)
-  - [🔍 Vista Previa de la Aplicación](#-vista-previa-de-la-aplicación)
+  - [📝 Creación de Evento](#-creación-de-evento)
+  - [👀 Previsualización de Evento](#-previsualización-de-evento)
 - [📐 Project Structure ](#-project-structure-)
 - [⛏️ Technology Stack ](#️-technology-stack-)
 - [✍️ Authors ](#️-authors-)
@@ -91,21 +91,20 @@ Ahora puedes abrir tu navegador y navegar a `http://localhost:3000` para ver la 
 
 ## 🎨 Screenshots & Previews <a name="screenshots"></a>
 
-### 🏠 Hero de la Aplicación  
-<img src="public/design/ss_hero.png" alt="Hero" width="100%">
-
 ### 🔑 Página de Inicio de Sesión  
 <img src="public/design/ss_login.jpeg" alt="Página de Inicio de Sesión" width="100%">
 
+### 🚀 Hero de Pagina Principal 
+<img src="public/design/ss_hero.png" alt="Hero" width="100%">
+
 ### 📋 Tabla de Eventos  
-<img src="public/design/ss_table.jpeg" alt="Tabla de Datos" width="100%">
+<img src="public/design/ss_table.jpeg" alt="Tabla de Eventos" width="100%">
 
-### 📅 Creacion de Evento  
-<img src="public/design/ss_event.png" alt="Vista de Evento" width="100%">
+### 📝 Creación de Evento  
+<img src="public/design/ss_event.png" alt="Creación de Evento" width="100%">
 
-### 🔍 Vista Previa de la Aplicación  
-<img src="public/design/ss_preview.jpeg" alt="Vista Previa de la Aplicación" width="100%">
-
+### 👀 Previsualización de Evento  
+<img src="public/design/ss_preview.jpeg" alt="Previsualización de Evento" width="100%">
 
 
 ## 📐 Project Structure <a name="project_structure"></a>
